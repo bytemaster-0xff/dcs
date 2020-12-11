@@ -1,0 +1,9 @@
+{
+    "name": "dcs-remote-client",
+    "description": "DCS World Remote Client Connectivity",
+    "author": "Kevin D. Wolf <kevinw@software-logistics.com> (https://www.software-logistics.com/)",
+    "version": "0.1.0",
+    "dependencies": {
+        "ws": "7.4.1"
+    }
+}
