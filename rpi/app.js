@@ -138,22 +138,11 @@ ws.on('open', function open() {
       ws.send(requestLiveData);
 });
 
-ws.on('message', function incoming(data) {
-    var msBuffer = Buffer.alloc(2);
-    var lsBuffer = Buffer.alloc(2);
-
-    msBuffer[0] = data[5];
-    msBuffer[1] = data[6];
-
-    lsBuffer[0] = data[7];
-    lsBuffer[1] = data[8];
-    for(let idx = 0; idx < data.length; ++idx){
-        processByte(data[idx]);
-    }
-
-    //console.log(msBuffer.toString('hex') + "  " + lsBuffer.toString('hex'));
-
-    var msWord = data[4] << 8 | data[5];
-    var mlsWord = data[6] << 8 | data[7];
-    //console.log(data.toString('hex'));
+ws.on('open', function open() {
+    console.log("Opened Connection.");
+    const requestLiveData = JSON.stringify({
+        datatype: "live_data",
+        data: {}
+      });
+      ws.send(requestLiveData);
 });

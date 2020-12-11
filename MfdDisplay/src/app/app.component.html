@@ -1,0 +1,12 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="background: black;">
+  
+  <svg width="300" height="300">
+    <text x="30" y="40" fill="green" >Battery: {{battery}}</text>
+    <text x="30" y="60" fill="green" >Generator: {{generator}}</text>
+    <circle cx="150" cy="150" r="75" stroke="green" stroke-width="4" />
+    <line x1="0"   [attr.x2]="lineLen" y1="150" y2="150"  stroke="green" stroke-width="4"  />
+  </svg>  
+</div>
+
+<button (click)="toggleBat()">Battery Battery</button>
