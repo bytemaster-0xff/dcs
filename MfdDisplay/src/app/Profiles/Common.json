@@ -1,0 +1,244 @@
+{
+    "Altitude": {
+                    "ALT_MSL_FT": {
+                                          "category": "Altitude",
+                                      "control_type": "metadata",
+                                       "description": "Altitude MSL (ft)",
+                                        "identifier": "ALT_MSL_FT",
+                                            "inputs": [  ],
+                                           "outputs": [ {
+                                                              "address": 1074,
+                                                          "description": "Altitude MSL (ft)",
+                                                                 "mask": 65535,
+                                                            "max_value": 65535,
+                                                             "shift_by": 0,
+                                                               "suffix": "",
+                                                                 "type": "integer"
+                                                      } ]
+                                  }
+                },
+     "Heading": {
+                         "HDG_DEG": {
+                                            "category": "Heading",
+                                        "control_type": "metadata",
+                                         "description": "Heading (Degrees)",
+                                          "identifier": "HDG_DEG",
+                                              "inputs": [  ],
+                                             "outputs": [ {
+                                                                "address": 1076,
+                                                            "description": "Heading (Degrees)",
+                                                                   "mask": 511,
+                                                              "max_value": 360,
+                                                               "shift_by": 0,
+                                                                 "suffix": "",
+                                                                   "type": "integer"
+                                                        } ]
+                                    },
+                    "HDG_DEG_FRAC": {
+                                            "category": "Heading",
+                                        "control_type": "metadata",
+                                         "description": "Heading (Fractional Degrees, divide by 127)",
+                                          "identifier": "HDG_DEG_FRAC",
+                                              "inputs": [  ],
+                                             "outputs": [ {
+                                                                "address": 1076,
+                                                            "description": "Heading (Fractional Degrees, divide by 127)",
+                                                                   "mask": 65024,
+                                                              "max_value": 127,
+                                                               "shift_by": 9,
+                                                                 "suffix": "",
+                                                                   "type": "integer"
+                                                        } ]
+                                    }
+                },
+    "Metadata": {
+                     "DCS_BIOS": {
+                                         "category": "Metadata",
+                                     "control_type": "display",
+                                      "description": "DCS Bios Version",
+                                       "identifier": "DCS_BIOS",
+                                           "inputs": [  ],
+                                          "outputs": [ {
+                                                             "address": 1024,
+                                                         "description": "DCS Bios Version",
+                                                          "max_length": 6,
+                                                              "suffix": "",
+                                                                "type": "string"
+                                                     } ]
+                                 },
+                    "PILOTNAME": {
+                                         "category": "Metadata",
+                                     "control_type": "display",
+                                      "description": "Pilot Name",
+                                       "identifier": "PILOTNAME",
+                                           "inputs": [  ],
+                                          "outputs": [ {
+                                                             "address": 1030,
+                                                         "description": "Pilot Name",
+                                                          "max_length": 24,
+                                                              "suffix": "",
+                                                                "type": "string"
+                                                     } ]
+                                 }
+                },
+    "Position": {
+                         "LAT_DEG": {
+                                            "category": "Position",
+                                        "control_type": "metadata",
+                                         "description": "Latitude Degrees",
+                                          "identifier": "LAT_DEG",
+                                              "inputs": [  ],
+                                             "outputs": [ {
+                                                                "address": 1054,
+                                                            "description": "Latitude Degrees",
+                                                                   "mask": 127,
+                                                              "max_value": 90,
+                                                               "shift_by": 0,
+                                                                 "suffix": "",
+                                                                   "type": "integer"
+                                                        } ]
+                                    },
+                         "LAT_SEC": {
+                                            "category": "Position",
+                                        "control_type": "metadata",
+                                         "description": "Latitude Seconds",
+                                          "identifier": "LAT_SEC",
+                                              "inputs": [  ],
+                                             "outputs": [ {
+                                                                "address": 1054,
+                                                            "description": "Latitude Seconds",
+                                                                   "mask": 8064,
+                                                              "max_value": 59,
+                                                               "shift_by": 7,
+                                                                 "suffix": "",
+                                                                   "type": "integer"
+                                                        } ]
+                                    },
+                    "LAT_SEC_FRAC": {
+                                            "category": "Position",
+                                        "control_type": "metadata",
+                                         "description": "Latitude Fractional Seconds (divide by 65535)",
+                                          "identifier": "LAT_SEC_FRAC",
+                                              "inputs": [  ],
+                                             "outputs": [ {
+                                                                "address": 1056,
+                                                            "description": "Latitude Fractional Seconds (divide by 65535)",
+                                                                   "mask": 65535,
+                                                              "max_value": 65535,
+                                                               "shift_by": 0,
+                                                                 "suffix": "",
+                                                                   "type": "integer"
+                                                        } ]
+                                    },
+                         "LON_DEG": {
+                                            "category": "Position",
+                                        "control_type": "metadata",
+                                         "description": "Longitude Degrees",
+                                          "identifier": "LON_DEG",
+                                              "inputs": [  ],
+                                             "outputs": [ {
+                                                                "address": 1070,
+                                                            "description": "Longitude Degrees",
+                                                                   "mask": 255,
+                                                              "max_value": 180,
+                                                               "shift_by": 0,
+                                                                 "suffix": "",
+                                                                   "type": "integer"
+                                                        } ]
+                                    },
+                         "LON_SEC": {
+                                            "category": "Position",
+                                        "control_type": "metadata",
+                                         "description": "Longitude Seconds",
+                                          "identifier": "LON_SEC",
+                                              "inputs": [  ],
+                                             "outputs": [ {
+                                                                "address": 1070,
+                                                            "description": "Longitude Seconds",
+                                                                   "mask": 16128,
+                                                              "max_value": 59,
+                                                               "shift_by": 8,
+                                                                 "suffix": "",
+                                                                   "type": "integer"
+                                                        } ]
+                                    },
+                    "LON_SEC_FRAC": {
+                                            "category": "Position",
+                                        "control_type": "metadata",
+                                         "description": "Longitude Fractional Seconds (divide by 65535)",
+                                          "identifier": "LON_SEC_FRAC",
+                                              "inputs": [  ],
+                                             "outputs": [ {
+                                                                "address": 1072,
+                                                            "description": "Longitude Fractional Seconds (divide by 65535)",
+                                                                   "mask": 65535,
+                                                              "max_value": 65535,
+                                                               "shift_by": 0,
+                                                                 "suffix": "",
+                                                                   "type": "integer"
+                                                        } ]
+                                    }
+                },
+       "Speed": {
+                        "IAS_EU": {
+                                          "category": "Speed",
+                                      "control_type": "display",
+                                       "description": "Indicated Airspeed KM H",
+                                        "identifier": "IAS_EU",
+                                            "inputs": [  ],
+                                           "outputs": [ {
+                                                              "address": 1058,
+                                                          "description": "Indicated Airspeed KM H",
+                                                           "max_length": 4,
+                                                               "suffix": "",
+                                                                 "type": "string"
+                                                      } ]
+                                  },
+                    "IAS_EU_INT": {
+                                          "category": "Speed",
+                                      "control_type": "metadata",
+                                       "description": "Indicated Airspeed KM H (Int)",
+                                        "identifier": "IAS_EU_INT",
+                                            "inputs": [  ],
+                                           "outputs": [ {
+                                                              "address": 1066,
+                                                          "description": "Indicated Airspeed KM H (Int)",
+                                                                 "mask": 65535,
+                                                            "max_value": 65535,
+                                                             "shift_by": 0,
+                                                               "suffix": "",
+                                                                 "type": "integer"
+                                                      } ]
+                                  },
+                        "IAS_US": {
+                                          "category": "Speed",
+                                      "control_type": "display",
+                                       "description": "Indicated Airspeed KNT",
+                                        "identifier": "IAS_US",
+                                            "inputs": [  ],
+                                           "outputs": [ {
+                                                              "address": 1062,
+                                                          "description": "Indicated Airspeed KNT",
+                                                           "max_length": 4,
+                                                               "suffix": "",
+                                                                 "type": "string"
+                                                      } ]
+                                  },
+                    "IAS_US_INT": {
+                                          "category": "Speed",
+                                      "control_type": "metadata",
+                                       "description": "Indicated Airspeed KNT (Int)",
+                                        "identifier": "IAS_US_INT",
+                                            "inputs": [  ],
+                                           "outputs": [ {
+                                                              "address": 1068,
+                                                          "description": "Indicated Airspeed KNT (Int)",
+                                                                 "mask": 65535,
+                                                            "max_value": 65535,
+                                                             "shift_by": 0,
+                                                               "suffix": "",
+                                                                 "type": "integer"
+                                                      } ]
+                                  }
+                }
+}

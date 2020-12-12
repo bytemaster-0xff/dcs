@@ -1,12 +1,29 @@
 <!--The content below is only a placeholder and can be replaced.-->
+<app-RadialGauge [radius]="90" [start]="90" [unit-scaler]="20" [currentValue]="rpmValue" label="RPM" style="position: absolute;top:50px;"></app-RadialGauge>
+<app-RadialGauge [start]="240" [degrees]="270" label="Altitude" [currentValue]="0" style="position: absolute;top:300px"></app-RadialGauge>
+<app-RadialGauge [start]="200" [radius]="80" label="Manifold" [currentValue]="163" style="position: absolute;left: 210px; top:200px"></app-RadialGauge>
+
+
 <div style="background: black;">
-  
-  <svg width="300" height="300">
-    <text x="30" y="40" fill="green" >Battery: {{battery}}</text>
-    <text x="30" y="60" fill="green" >Generator: {{generator}}</text>
-    <circle cx="150" cy="150" r="75" stroke="green" stroke-width="4" />
-    <line x1="0"   [attr.x2]="lineLen" y1="150" y2="150"  stroke="green" stroke-width="4"  />
-  </svg>  
+
+  <!-- <svg width="300" height="300">
+    <circle [attr.cx]="this.centerX" [attr.cy]="centerY" [attr.r]="radius" stroke="lightgreen" stroke-width="2" />
+    <line *ngFor="let segment of segments" [attr.x1]="segment.x1" [attr.x2]="segment.x2" [attr.y1]="segment.y1" [attr.y2]="segment.y2" stroke="lightgreen" stroke-width="2" />
+    <text *ngFor="let segment of segments" [attr.x]="segment.labelX" [attr.y]="segment.labelY"  dominant-baseline="middle" text-anchor="middle"  fill="lightgreen" >{{segment.label}}</text>
+    <text x="30" y="40" fill="lightgreen" >Battery: {{battery}}</text>
+    <text  [attr.x]="centerX" [attr.y]="40" glyph-orientation-horizontal="45" text-anchor="middle"  fill="lightgreen" >Generator: {{generator}}</text>
+    <text [attr.x]="centerX" [attr.y]="centerY - (radius/3)" text-anchor="middle" fill="lightgreen">RPM</text> 
+    <text [attr.x]="centerX" [attr.y]="centerY + (radius/3)" text-anchor="middle" fill="lightgreen">{{value}}</text> 
+  </svg>  -->
 </div>
+<span style="color: lightgreen">
+  CenterY = {{centerY}}
+</span>
 
 <button (click)="toggleBat()">Battery Battery</button>
+
+<div style="position: absolute;top:100px; left:300px">
+  <div *ngFor="let listener of listeners">
+    <span style="color: lightgreen">{{listener.device.description}}- {{listener.device.currentValue}}</span>
+  </div>
+</div>
