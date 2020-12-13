@@ -55,6 +55,23 @@ export class AppComponent implements OnInit, OnDestroy {
     this.webSocket.send(json);
   }
 
+  sendBoolAction(action: string, value: boolean) {
+    if (value) {
+      action += ' 1';
+    } else {
+      action += ' 0';
+    }
+
+    const json = JSON.stringify({
+      datatype: 'input_command',
+      data: action
+    });
+
+    console.log(json);
+
+    this.webSocket.send(json);
+  }
+
   registerListener(categoryName: string, parameter: string, changedCallback) {
     var source = categoryName == "Altitude" ||
                  categoryName == "Heading" ||
@@ -83,11 +100,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.registerListener('Right Switch Panel', 'BAT', (value) => {
-      console.log('Battery On Status :' + value);
       this.battery = value === 1 ? 'On' : 'Off';
     });
     this.registerListener('Right Switch Panel', 'GEN', (value) => {
-      console.log('Generator Status :' + value);
       this.generator = value === 1 ? 'On' : 'Off';
     });
 
@@ -96,18 +111,26 @@ export class AppComponent implements OnInit, OnDestroy {
     this.registerListener('Heading', 'HDG_DEG', (value) => { });
     this.registerListener('Speed', 'IAS_EU', (value) => { });
     
-    this.registerListener('Engine System', 'ENGINE_RPM', (value) => { console.log('Engine RPM :' + value); });
-    this.registerListener('Engine System', 'MIXTURE_CONTROL', (value) => { console.log('Mixture Control :' + value); });
-    this.registerListener('Engine System', 'PROPELLER_RPM', (value) => { console.log('Engine RPM :' + value); });
-    this.registerListener('Engine System', 'THROTTLE', (value) => { console.log('Engine RPM :' + value); });
-    this.registerListener('Engine System', 'MANIFOLD_PRESSURE', (value) => { console.log('Manifold Pressure :' + value); });
+
+    this.registerListener('Light System', 'LANDING_GEAR_GREEN', (value) => {  });
+    this.registerListener('Light System', 'LANDING_GEAR_RED', (value) => { });
+  
+
+    this.registerListener('Electric System', 'AMMETER', (value) => {  });
+  
+    this.registerListener('Engine System', 'ENGINE_RPM', (value) => { this.rpmValue = Math.round( value / 15) / 10; });
+    this.registerListener('Engine System', 'MIXTURE_CONTROL', (value) => {  });
+    this.registerListener('Engine System', 'PROPELLER_RPM', (value) => { });
+    this.registerListener('Engine System', 'THROTTLE', (value) => { });
+    this.registerListener('Engine System', 'MANIFOLD_PRESSURE', (value) => {  });
+    this.registerListener('Engine System', 'OIL_PRES', (value) => { });
     
-    this.registerListener('Fuel System', 'FUEL_SELECTOR_VALVE', (value) => { console.log('Fuel Selector :' + value); });
-    this.registerListener('Fuel System', 'FUEL_SHUT_OFF_VALVE', (value) => { console.log('Fuel Shutoff :' + value); });
-    this.registerListener('Fuel System', 'FUEL_PRESSURE', (value) => { console.log('Fuel Pressure :' + value); });
-    this.registerListener('Fuel System', 'FUEL_TANK_FUSELAGE', (value) => { console.log('Fuel Fuselage:' + value); });
-    this.registerListener('Fuel System', 'FUEL_TANK_LEFT', (value) => { console.log('Fuel Left :' + value); });
-    this.registerListener('Fuel System', 'FUEL_TANK_RIGHT', (value) => { console.log('Fuel Right : ' + value); });
+    this.registerListener('Fuel System', 'FUEL_SELECTOR_VALVE', (value) => {  });
+    this.registerListener('Fuel System', 'FUEL_SHUT_OFF_VALVE', (value) => {  });
+    this.registerListener('Fuel System', 'FUEL_PRESSURE', (value) => { });
+    this.registerListener('Fuel System', 'FUEL_TANK_FUSELAGE', (value) => { });
+    this.registerListener('Fuel System', 'FUEL_TANK_LEFT', (value) => { });
+    this.registerListener('Fuel System', 'FUEL_TANK_RIGHT', (value) => {  });
 
     this.registerListener('Engine Control Panel', 'STARTER_COVER', (value) => { });
 
@@ -115,11 +138,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.registerListener('Remote Compass', 'REMOTE_COMPASS_CRS', (value) => { });
     this.registerListener('Remote Compass', 'REMOTE_COMPASS_HDG', (value) => { });
 
-    this.registerListener('Control System', 'RUDDER_TRIM', (value) => { console.log('Rudder Trim :' + value); });
-    this.registerListener('Front Switch Box', 'IGNITION', (value) => { console.log('Front Switch Box :' + value); });
-    this.registerListener('Control System', 'ELEVATOR_TRIM', (value) => { console.log('Elevator :' + value); });
-    this.registerListener('Control System', 'FLAPS_CONTROL_HANDLE', (value) => { console.log('Flaps :' + value); });
-    this.registerListener('Control System', 'AILERON_TRIM', (value) => { console.log('Aileron Trim :' + value); });
+    this.registerListener('Control System', 'RUDDER_TRIM', (value) => { });
+    this.registerListener('Front Switch Box', 'IGNITION', (value) => {  });
+    this.registerListener('Control System', 'ELEVATOR_TRIM', (value) => {  });
+    this.registerListener('Control System', 'FLAPS_CONTROL_HANDLE', (value) => {  });
+    this.registerListener('Control System', 'AILERON_TRIM', (value) => {  });
 
     this.dataProcess = new ExportDataParser();
     this.dataProcess.onDcsUpdate().subscribe(
@@ -139,17 +162,6 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       }
     );
-
-      window.setInterval(() => {
-        this.rpmValue += this.interval;
-        if(this.rpmValue > 280) {
-          this.interval = -1;
-        }
-        
-        if(this.rpmValue < 0) {
-          this.interval = 1;
-        }
-      });
 
     this.webSocket = new WebSocket('ws://10.1.1.57:5010/api/websocket');
     this.webSocket.onopen = (evt) => {
@@ -178,5 +190,25 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log('err');
       console.log(evt);
     };
+  }
+
+  setValue(action: string, value: number) {
+    action += ` ${value}`
+    const json = JSON.stringify({
+      datatype: 'input_command',
+      data: action
+    });
+
+    console.log(json);
+
+    this.webSocket.send(json); 
+  }
+
+  startAction(action: string) {
+    this.sendBoolAction(action, true);
+  }
+
+  endAction(action: string){
+    this.sendBoolAction(action, false);
   }
 }

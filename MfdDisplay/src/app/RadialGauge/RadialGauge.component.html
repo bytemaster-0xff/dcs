@@ -6,6 +6,9 @@
     text-anchor="middle" fill="white">{{segment.label}}</text>
   <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius"
     [attr.y]="radius/1.5">{{label}}</text>
+    
+  <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius"
+  [attr.y]="radius * 1.5">{{value}}</text>
   <path [attr.d]="pointer" fill="white" />
   <circle [attr.cx]="radius + 2" fill="#333" [attr.cy]="radius + 2" [attr.r]="radius * 0.1" fill="silver" />
   <circle [attr.cx]="radius + 2" fill="#333" [attr.cy]="radius + 2" [attr.r]="radius * 0.04" fill="black" />
