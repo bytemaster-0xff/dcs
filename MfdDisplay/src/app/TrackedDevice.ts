@@ -38,8 +38,8 @@ export class Line {
     x2: number;
     y1: number;
     y2: number;
-    labelX: number;
-    labelY: number;
-    label: string;
-    rotate: number;
+    labelX?: number;
+    labelY?: number;
+    label?: string;
+    rotate?: number;
 }

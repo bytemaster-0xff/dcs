@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { RadialGaugeComponent } from './RadialGauge/RadialGauge.component';
+import { AltimeterComponent } from './Altimeter/Altimeter.component';
 
 @NgModule({
-  declarations: [	
+  declarations: [		
     AppComponent,
-      RadialGaugeComponent
+      RadialGaugeComponent,
+      AltimeterComponent
    ],
   imports: [
     BrowserModule

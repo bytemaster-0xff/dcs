@@ -1,14 +1,19 @@
 <svg [attr.height]="(radius * 2) + 4" [attr.width]="radius*2 + 4">
-  <circle [attr.cx]="radius + 2" fill="#333" [attr.cy]="radius + 2" [attr.r]="radius" stroke="silver" stroke-width="2" />
-  <line *ngFor="let segment of segments" [attr.x1]="segment.x1" [attr.x2]="segment.x2" [attr.y1]="segment.y1"
-    [attr.y2]="segment.y2" stroke="gray" stroke-width="2" />
+  <circle [attr.cx]="radius + 2" fill="#0" [attr.cy]="radius + 2" [attr.r]="radius" stroke="white" stroke-width="2" />
+
+  <line *ngFor="let segment of minorSegments" [attr.x1]="segment.x1" [attr.x2]="segment.x2" [attr.y1]="segment.y1"
+                                              [attr.y2]="segment.y2" stroke="gray" stroke-width="2" />
+ 
+ <line *ngFor="let segment of segments" [attr.x1]="segment.x1" [attr.x2]="segment.x2" [attr.y1]="segment.y1"
+                                        [attr.y2]="segment.y2" stroke="white" stroke-width="2" />
+
   <text *ngFor="let segment of segments" [attr.x]="segment.labelX" [attr.y]="segment.labelY" dominant-baseline="middle"
-    text-anchor="middle" fill="white">{{segment.label}}</text>
+    font-weight="bold" text-anchor="middle" fill="white">{{segment.label}}</text>
   <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius"
     [attr.y]="radius/1.5">{{label}}</text>
     
   <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius"
-  [attr.y]="radius * 1.5">{{value}}</text>
+        [attr.y]="radius * 1.5">{{valueLabel}}</text>
   <path [attr.d]="pointer" fill="white" />
   <circle [attr.cx]="radius + 2" fill="#333" [attr.cy]="radius + 2" [attr.r]="radius * 0.1" fill="silver" />
   <circle [attr.cx]="radius + 2" fill="#333" [attr.cy]="radius + 2" [attr.r]="radius * 0.04" fill="black" />

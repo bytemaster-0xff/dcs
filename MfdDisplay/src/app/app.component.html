@@ -1,26 +1,24 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<app-RadialGauge [radius]="90" [start]="210" [degrees]="320" [unit-scaler]="0.15" [currentValue]="rpmValue" label="RPM" style="position: absolute;top:50px;"></app-RadialGauge>
-<app-RadialGauge [start]="240" [degrees]="270" label="Altitude" [currentValue]="0" style="position: absolute;top:300px"></app-RadialGauge>
-<app-RadialGauge [start]="260" [degrees]="350" [unit-scaler]="0.225" [radius]="80" label="Manifold" [currentValue]="163" style="position: absolute;left: 210px; top:200px"></app-RadialGauge>
+<div style="color:lightgreen"  >{{aircraftName}}</div>
 
+<app-RadialGauge [start]="0" [degrees]="280" [units]="' mph'" [segment-count]="7" [minor-segment-count]="35" label="IAS" [currentValue]="ias" [max]="700" style="position: absolute;top:80px"></app-RadialGauge>
+<app-RadialGauge [start]="0" [degrees]="360" [units]="' deg'" label="HDG" [currentValue]="heading" [max]="360" style="left:400px;position: absolute;top:80px"></app-RadialGauge>
+<app-RadialGauge [start]="210" [degrees]="320" [max]="45" [segment-count]="9" [minor-segment-count]="45" [currentValue]="rpmValue" label="RPM" style="position: absolute;top:280px;"></app-RadialGauge>
+<app-RadialGauge [start]="260" [degrees]="300" [segment-count]="10" [units]="' in Hg'" [min]="0" [max]="70" [radius]="100" label="Manifold" [currentValue]="manifoldPressure" 
+  style="position: absolute;left: 200px; top:280px"></app-RadialGauge>
 
-<div style="background: black;">
+<span stye="position:absolute;top 500px; left:200px;color:white">Fuel</span>
+<app-RadialGauge [segment-count]="4" [start]="245" [degrees]="230" [max]="92" [units]="' gal'" [radius]="60" label="Left" [currentValue]="fuelLeft" style="position: absolute;left: 20px; top:520px"></app-RadialGauge>
+<app-RadialGauge [segment-count]="4" [start]="245" [degrees]="230" [max]="92" [units]="' gal'" [radius]="60" label="Right" [currentValue]="fuelRight" style="position: absolute;left: 240px; top:520px"></app-RadialGauge>
 
-  <!-- <svg width="300" height="300">
-    <circle [attr.cx]="this.centerX" [attr.cy]="centerY" [attr.r]="radius" stroke="lightgreen" stroke-width="2" />
-    <line *ngFor="let segment of segments" [attr.x1]="segment.x1" [attr.x2]="segment.x2" [attr.y1]="segment.y1" [attr.y2]="segment.y2" stroke="lightgreen" stroke-width="2" />
-    <text *ngFor="let segment of segments" [attr.x]="segment.labelX" [attr.y]="segment.labelY"  dominant-baseline="middle" text-anchor="middle"  fill="lightgreen" >{{segment.label}}</text>
-    <text x="30" y="40" fill="lightgreen" >Battery: {{battery}}</text>
-    <text  [attr.x]="centerX" [attr.y]="40" glyph-orientation-horizontal="45" text-anchor="middle"  fill="lightgreen" >Generator: {{generator}}</text>
-    <text [attr.x]="centerX" [attr.y]="centerY - (radius/3)" text-anchor="middle" fill="lightgreen">RPM</text> 
-    <text [attr.x]="centerX" [attr.y]="centerY + (radius/3)" text-anchor="middle" fill="lightgreen">{{value}}</text> 
-  </svg>  -->
-</div>
+<app-Altimeter style="position: absolute;left:200px; top:80px" [minor-segment-count]="50" [units]="' ft'" label="Alt" [currentValue]="23450"></app-Altimeter>
 
 <button (mousedown)="startAction('SAFE_LND_GEAR_LT_TEST')" (mouseup)="endAction('SAFE_LND_GEAR_LT_TEST')" >Safe Test</button>
 <button (mousedown)="startAction('UNSAFE_LND_GEAR_LT_TEST')" (mouseup)="endAction('UNSAFE_LND_GEAR_LT_TEST')" >Un Safe Test</button>
+<button (mousedown)="startAction('PRIMER')" (mouseup)="endAction('PRIMER')" >Prime</button>
+<button (mousedown)="startAction('STARTER')" (mouseup)="endAction('STARTER')" >Start</button>
 
-<button (click)="toggleBat()">Battery Battery</button>
+<button (click)="toggleBat()">Battery</button>
+<button (click)="toggleGenerator()">Generator</button>
 
 <div>
   Fuel Valve
@@ -33,7 +31,7 @@
 </div>
 
 
-<div style="position: absolute;top:100px; left:400px">
+<div style="position: absolute;top:100px; left:800px">
   <div *ngFor="let listener of listeners">
     <span style="color: lightgreen">{{listener.device.description}}- {{listener.device.currentValue}}</span>
   </div>

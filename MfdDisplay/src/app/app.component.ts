@@ -18,19 +18,26 @@ export class AppComponent implements OnInit, OnDestroy {
   webSocket: WebSocket;
   dataProcess: ExportDataParser;
 
+  aircraftName = "No Aircraft";
+
   centerX = 150;
   centerY = 150;
   radius = 100;
   segLen = 10;
   value = 1300;
   segementCount = 12;
-
+  manifoldPressure = 0;
   rpmValue = 0;
-
+  altitude = 0;
+  heading = 0;
+  ias = 0;
   segments: Line[] = [];
 
   battery: string;
   generator: string;
+
+  fuelLeft = 0;
+  fuelRight = 0;
 
   ngOnDestroy(): void {
     if (this.webSocket) {
@@ -106,12 +113,14 @@ export class AppComponent implements OnInit, OnDestroy {
       this.generator = value === 1 ? 'On' : 'Off';
     });
 
-    this.registerListener('Variometer', 'VARIOMETER_VVI', (value) => { });
-    this.registerListener('Altitude', 'ALT_MSL_FT', (value) => { });
-    this.registerListener('Heading', 'HDG_DEG', (value) => { });
-    this.registerListener('Speed', 'IAS_EU', (value) => { });
     
+    this.registerListener('MetadataStart', '_ACFT_NAME', (value) => { this.aircraftName = value; });
 
+    this.registerListener('Variometer', 'VARIOMETER_VVI', (value) => { });
+    this.registerListener('Altitude', 'ALT_MSL_FT', (value) => { this.altitude = value; });
+    this.registerListener('Heading', 'HDG_DEG', (value) => { this.heading = value; });
+    this.registerListener('Speed', 'IAS_EU', (value) => { this.ias = value; });
+    
     this.registerListener('Light System', 'LANDING_GEAR_GREEN', (value) => {  });
     this.registerListener('Light System', 'LANDING_GEAR_RED', (value) => { });
   
@@ -122,15 +131,15 @@ export class AppComponent implements OnInit, OnDestroy {
     this.registerListener('Engine System', 'MIXTURE_CONTROL', (value) => {  });
     this.registerListener('Engine System', 'PROPELLER_RPM', (value) => { });
     this.registerListener('Engine System', 'THROTTLE', (value) => { });
-    this.registerListener('Engine System', 'MANIFOLD_PRESSURE', (value) => {  });
+    this.registerListener('Engine System', 'MANIFOLD_PRESSURE', (value) => { this.manifoldPressure = value / 1000; });
     this.registerListener('Engine System', 'OIL_PRES', (value) => { });
     
     this.registerListener('Fuel System', 'FUEL_SELECTOR_VALVE', (value) => {  });
     this.registerListener('Fuel System', 'FUEL_SHUT_OFF_VALVE', (value) => {  });
     this.registerListener('Fuel System', 'FUEL_PRESSURE', (value) => { });
     this.registerListener('Fuel System', 'FUEL_TANK_FUSELAGE', (value) => { });
-    this.registerListener('Fuel System', 'FUEL_TANK_LEFT', (value) => { });
-    this.registerListener('Fuel System', 'FUEL_TANK_RIGHT', (value) => {  });
+    this.registerListener('Fuel System', 'FUEL_TANK_LEFT', (value) => { this.fuelLeft = value / 566; });
+    this.registerListener('Fuel System', 'FUEL_TANK_RIGHT', (value) => { this.fuelRight = value / 566;  });
 
     this.registerListener('Engine Control Panel', 'STARTER_COVER', (value) => { });
 
