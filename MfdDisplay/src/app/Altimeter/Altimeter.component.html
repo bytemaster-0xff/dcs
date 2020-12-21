@@ -1,6 +1,15 @@
-<svg [attr.height]="(radius * 2) + 4" [attr.width]="radius*2 + 4">
-  <circle [attr.cx]="radius + 2" fill="black" [attr.cy]="radius + 2" [attr.r]="radius" stroke="white" stroke-width="2" />
-  <circle [attr.cx]="radius + 2" fill="#222" [attr.cy]="radius + 2" [attr.r]="radius / 2" />
+<svg [attr.height]="(radius * 2) + (bezel * 2)" [attr.width]="(radius *2) + (bezel * 2)" font-family="arial">
+  <path [attr.d]="bezelPath" fill="#222" />
+
+  <circle [attr.cx]="fullWidth * 0.1" [attr.cy]="fullHeight * 0.1" [attr.r]="7" fill="black"  />
+  <circle [attr.cx]="fullWidth * 0.9" [attr.cy]="fullHeight * 0.1" [attr.r]="7" fill="black"  />
+  <circle [attr.cx]="fullWidth * 0.9" [attr.cy]="fullHeight * 0.9" [attr.r]="7" fill="black"  />
+  <circle [attr.cx]="fullWidth * 0.1" [attr.cy]="fullHeight * 0.9" [attr.r]="7" fill="black"  />
+
+  <circle [attr.cx]="centerY" fill="#0" [attr.cy]="centerX" [attr.r]="radius + 6" fill="gray"  />
+ 
+  <circle [attr.cx]="radius + bezel" fill="black" [attr.cy]="radius + bezel" [attr.r]="radius" stroke="white" stroke-width="2" />
+  <circle [attr.cx]="radius + bezel" fill="#222" [attr.cy]="radius + bezel" [attr.r]="radius / 2" />
   <line *ngFor="let segment of minorSegments" [attr.x1]="segment.x1" [attr.x2]="segment.x2" [attr.y1]="segment.y1"
   [attr.y2]="segment.y2" stroke="gray" stroke-width="2" />
   <line *ngFor="let segment of segments" [attr.x1]="segment.x1" [attr.x2]="segment.x2" [attr.y1]="segment.y1"
@@ -8,11 +17,11 @@
   <text *ngFor="let segment of segments" [attr.x]="segment.labelX" [attr.y]="segment.labelY" dominant-baseline="middle"
      font-weight="bold" font-size="20" text-anchor="middle" fill="white">{{segment.label}}</text>
 
-  <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius"
-    [attr.y]="radius/1.5">{{label}}</text>
+  <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius + bezel"
+    [attr.y]="radius /1.5 + bezel">{{label}}</text>
     
-  <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius"
-        [attr.y]="radius * 1.5">{{valueLabel}}</text>
+  <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius + bezel"
+        [attr.y]="radius * 1.5 + bezel">{{valueLabel}}</text>
 
   <path [attr.d]="pointer10KFoot" fill="white" />
   <path [attr.d]="pointer1KFoot" fill="white" />
@@ -20,6 +29,6 @@
 
   <line [attr.x1]="center" [attr.y1]="center" [attr.x2]="tenKX" [attr.y2]="tenKY" stroke="white" stroke-width="2" />
 
-  <circle [attr.cx]="radius + 2" fill="#333" [attr.cy]="radius + 2" [attr.r]="radius * 0.1" fill="silver" />
-  <circle [attr.cx]="radius + 2" fill="#333" [attr.cy]="radius + 2" [attr.r]="radius * 0.04" fill="black" />
+  <circle [attr.cx]="radius + 2 + bezel" [attr.cy]="radius + 2 + bezel" [attr.r]="radius * 0.1" fill="#444" />
+  <circle [attr.cx]="radius + 2 + bezel" [attr.cy]="radius + 2 + bezel" [attr.r]="radius * 0.04" fill="black" />
 </svg>

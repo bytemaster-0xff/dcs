@@ -4,12 +4,16 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RadialGaugeComponent } from './RadialGauge/RadialGauge.component';
 import { AltimeterComponent } from './Altimeter/Altimeter.component';
+import { VarioMeterComponent } from './VarioMeter/VarioMeter.component';
+import { TurnSlipComponent } from './TurnSlip/TurnSlip.component';
 
 @NgModule({
-  declarations: [		
+  declarations: [				
     AppComponent,
       RadialGaugeComponent,
-      AltimeterComponent
+      AltimeterComponent,
+      VarioMeterComponent,
+      TurnSlipComponent
    ],
   imports: [
     BrowserModule
