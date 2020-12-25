@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   value = 1300;
   segementCount = 12;
   manifoldPressure = 0;
-  rpmValue = 0;
+  rpmValue = 16;
   altitude = 0;
   heading = 0;
   ias = 0;

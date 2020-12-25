@@ -6,14 +6,18 @@ import { RadialGaugeComponent } from './RadialGauge/RadialGauge.component';
 import { AltimeterComponent } from './Altimeter/Altimeter.component';
 import { VarioMeterComponent } from './VarioMeter/VarioMeter.component';
 import { TurnSlipComponent } from './TurnSlip/TurnSlip.component';
+import { TemperatureComponent } from './Temperature/Temperature.component';
+import { OilFuelGaugeComponent } from './OilFuelGauge/OilFuelGauge.component';
 
 @NgModule({
-  declarations: [				
+  declarations: [						
     AppComponent,
       RadialGaugeComponent,
       AltimeterComponent,
       VarioMeterComponent,
-      TurnSlipComponent
+      TurnSlipComponent,
+      TemperatureComponent,
+      OilFuelGaugeComponent
    ],
   imports: [
     BrowserModule

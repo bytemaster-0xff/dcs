@@ -43,3 +43,18 @@ export class Line {
     label?: string;
     rotate?: number;
 }
+
+export class SegmentsSpec {
+    min: number;
+    max: number;
+    centerX: number;
+    centerY: number;
+    radius: number;
+    degrees: number = 360;
+    startAngle: number = 0;
+    label: string;
+    segmentCount: number;
+    minorSegmentCount: number;
+    segmentLength: number = 5;
+    numberDecimal: number = 1;
+}
