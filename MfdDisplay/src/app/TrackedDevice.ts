@@ -47,6 +47,7 @@ export class Line {
 export class SegmentsSpec {
     min: number;
     max: number;
+    reverse = false;
     centerX: number;
     centerY: number;
     radius: number;
