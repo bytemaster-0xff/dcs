@@ -38,7 +38,13 @@ export class TemperatureComponent  extends RadialGaugeComponent implements OnIni
  
     if(this.redStart !== null && this.redEnd !== null)
     {
-      this.populateOverTolerance();
+      this.pathUnderTolerance = this.populateOutOfTolerance(this.redStart, this.redEnd);
+    } 
+
+    
+    if(this.redStart2 !== null && this.redEnd2 !== null)
+    {
+      this.pathOverTolerance = this.populateOutOfTolerance(this.redStart2, this.redEnd2);
     } 
   }
 }

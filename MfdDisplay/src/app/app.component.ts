@@ -31,6 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
   altitude = 0;
   heading = 0;
   ias = 0;
+  suction = 8;
   segments: Line[] = [];
 
   battery: string;

@@ -54,8 +54,13 @@
   <path [attr.d]="pointerOilPressure" fill="white" />
   <path [attr.d]="pointerFuelPressure" fill="white" />
 
+  <circle [attr.cx]="centerX" [attr.cy]="centerY" [attr.r]="radius * 0.1" fill="#444" />
+  <circle [attr.cx]="centerX" [attr.cy]="centerY" [attr.r]="radius * 0.04" fill="black" />
 
-  <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.1" fill="#444" />
-  <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.04" fill="black" />
+  <circle [attr.cx]="oilPressureSpec.centerX" [attr.cy]="oilPressureSpec.centerY" [attr.r]="radius * 0.06" fill="#444" />
+  <circle [attr.cx]="oilPressureSpec.centerX" [attr.cy]="oilPressureSpec.centerY" [attr.r]="radius * 0.02" fill="black" />
+  
+  <circle [attr.cx]="fuelPressureSpec.centerX" [attr.cy]="oilPressureSpec.centerY" [attr.r]="radius * 0.06" fill="#444" />
+  <circle [attr.cx]="fuelPressureSpec.centerX" [attr.cy]="oilPressureSpec.centerY" [attr.r]="radius * 0.02" fill="black" />
 
 </svg>

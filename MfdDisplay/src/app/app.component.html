@@ -28,12 +28,17 @@
   [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Right" [currentValue]="fuelRight" 
   style="position: absolute;left: 180px; top:580px"></app-RadialGauge>
 
+  <app-RadialGauge [segment-count]="5" [start]="245" [degrees]="230" [max]="10" [units]="' gal'" [minor-segment-count]="40"
+  [green-start]="3.7" [green-end]="4.3" [red-start]="3.5" [red-end]="3.7"  [red-start2]="4.3" [red-end2]="4.5"
+  [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Suction" [currentValue]="suction" 
+  style="position: absolute;left: 560px; top:580px"></app-RadialGauge>
+
 <app-turn-slip [radius]="80" style="position: absolute;left: 350px; top:580px"></app-turn-slip>  
 
 <app-temperature [red-start]="40" [red-end]="50" [green-start]="10" [green-end]="40" [radius]="60" [currentValue]="130" label="CARB. TEMP" style="position: absolute;left: 10px; top:750px"></app-temperature>
 <app-temperature [radius]="60" [currentValue]="15" label="COOLANT" style="position: absolute;left: 180px; top:750px"></app-temperature>
 
-<app-oil-fuel-gauge [oil-pressure]="75" [fuel-pressure]="15.5" [oil-temperature]="70" [radius]="100" style="position: absolute; top: 750px; left:600px" ></app-oil-fuel-gauge>
+<app-oil-fuel-gauge [oil-pressure]="75" [fuel-pressure]="15.5" [oil-temperature]="70" [radius]="100" style="position: absolute; top: 750px; left:560px" ></app-oil-fuel-gauge>
 
 <button (mousedown)="startAction('SAFE_LND_GEAR_LT_TEST')" (mouseup)="endAction('SAFE_LND_GEAR_LT_TEST')" >Safe Test</button>
 <button (mousedown)="startAction('UNSAFE_LND_GEAR_LT_TEST')" (mouseup)="endAction('UNSAFE_LND_GEAR_LT_TEST')" >Un Safe Test</button>
