@@ -56,7 +56,7 @@ export class TurnSlipComponent extends RadialGaugeComponent implements OnInit {
 
     this.renderBezel();
 
-    this.setSlipPath(0);
+    this.setSlipPath(5);
   }
 
   @Input('turn') turn : number = 0;

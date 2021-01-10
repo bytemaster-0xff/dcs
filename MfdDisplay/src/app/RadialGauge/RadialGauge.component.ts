@@ -21,6 +21,7 @@ export class RadialGaugeComponent implements OnInit {
   fullHeight: number;
 
   pathInTolerance = "";
+  pathUnderTolerance = "";
   pathOverTolerance = "";
 
   bezelPath = "M0 0";
@@ -113,8 +114,13 @@ export class RadialGaugeComponent implements OnInit {
  
     if(this.redStart !== null && this.redEnd !== null)
     {
-      this.populateOverTolerance();
+      this.pathUnderTolerance = this.populateOutOfTolerance(this.redStart, this.redEnd);
     }
+    
+    if(this.redStart2 !== null && this.redEnd2 !== null)
+    {
+      this.pathOverTolerance = this.populateOutOfTolerance(this.redStart2, this.redEnd2);
+   }
   }
 
   populateInTolerance() {
@@ -133,11 +139,11 @@ export class RadialGaugeComponent implements OnInit {
     this.pathInTolerance = `M${startX} ${startY} A ${this.radius} ${this.radius} ${end-start}, 0 1, ${endX} ${endY}`;
   }
 
-  populateOverTolerance() {
-    let start = (((this.redStart - this.min) / (this.max - this.min)) * this.degrees);
+  populateOutOfTolerance(startValue: number, endValue: number) {
+    let start = (((startValue - this.min) / (this.max - this.min)) * this.degrees);
     let startDegrees = ((start + this.start) - 90);
 
-    let end = (((this.redEnd - this.min) / (this.max - this.min)) * this.degrees);
+    let end = (((endValue - this.min) / (this.max - this.min)) * this.degrees);
     let endDegrees = ((end + this.start) - 90);
 
     let startY = this.centerY + Math.sin((startDegrees) * (Math.PI / 180)) * (this.radius * 0.9);
@@ -146,10 +152,8 @@ export class RadialGaugeComponent implements OnInit {
     let endY = this.centerY + Math.sin((endDegrees) * (Math.PI / 180)) * (this.radius * 0.9);
     let endX = this.centerX + Math.cos((endDegrees) * (Math.PI / 180)) * (this.radius * 0.9);
 
-    this.pathOverTolerance = `M${startX} ${startY} A ${this.radius} ${this.radius} ${end-start}, 0 1, ${endX} ${endY}`;
-    console.log("RED", this.pathOverTolerance);
+    return `M${startX} ${startY} A ${this.radius} ${this.radius} ${end-start}, 0 1, ${endX} ${endY}`;
   }
-
 
   setPointer(value: number): void {
       this.value = value;
@@ -214,4 +218,6 @@ export class RadialGaugeComponent implements OnInit {
   @Input('green-end') greenEnd: number = null;
   @Input('red-start') redStart: number = null;;
   @Input('red-end') redEnd: number = null;
+  @Input('red-start2') redStart2: number = null;;
+  @Input('red-end2') redEnd2: number = null;
 }

@@ -14,8 +14,9 @@
   <circle [attr.cx]="centerY" fill="#0" [attr.cy]="centerX" [attr.r]="radius + 6" fill="gray" filter="url(#shadow)" />
   <circle [attr.cx]="centerY" fill="#0" [attr.cy]="centerX" [attr.r]="radius" stroke="white" stroke-width="2" />
 
-  <path [attr.d]="pathInTolerance" stroke="#007F00" stroke-width="6" />
-  <path [attr.d]="pathOverTolerance" stroke="#7F0000" stroke-width="6" />
+  <path [attr.d]="pathInTolerance" stroke="#00FF00" stroke-width="6" />
+  <path [attr.d]="pathUnderTolerance" stroke="#FF0000" stroke-width="6" />
+  <path [attr.d]="pathOverTolerance" stroke="#FF0000" stroke-width="6" />
 
   <line *ngFor="let segment of minorSegments" [attr.x1]="segment.x1" [attr.x2]="segment.x2" [attr.y1]="segment.y1"
     [attr.y2]="segment.y2" stroke="gray" stroke-width="2" />
