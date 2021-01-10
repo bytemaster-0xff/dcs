@@ -1,0 +1,31 @@
+<div style="color:lightgreen"  >LEFT - {{aircraftName}}</div>
+ 
+<app-Altimeter style="position: absolute;left:260px; top:80px" [minor-segment-count]="50" [units]="' ft'" label="ALTITUDE" [currentValue]="23450"></app-Altimeter>
+
+<app-variometer [radius]="100" [currentValue]="-1.2" style="position: absolute;left: 510px; top:330px"></app-variometer>
+
+<span stye="position:absolute;top 510px; left:250px;color:white">Fuel</span>
+
+<app-RadialGauge [segment-count]="4" [start]="245" [degrees]="230" [max]="92" [units]="' gal'" [minor-segment-count]="12"
+  [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Left" [currentValue]="fuelLeft" 
+  style="position: absolute;left: 30px; top:380px"></app-RadialGauge>
+
+<app-RadialGauge [segment-count]="4" [start]="245" [degrees]="230" [max]="92" [units]="' gal'" [minor-segment-count]="12"
+  [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Right" [currentValue]="fuelRight" 
+  style="position: absolute;left: 280px; top:380px"></app-RadialGauge>
+
+<div>
+  Fuel Valve
+</div>
+<div>
+  <button (click)="setValue('FUEL_SELECTOR_VALVE',0)">Off</button>
+  <button (click)="setValue('FUEL_SELECTOR_VALVE',1)">Left</button>
+  <button (click)="setValue('FUEL_SELECTOR_VALVE',2)">Fuselage</button>
+  <button (click)="setValue('FUEL_SELECTOR_VALVE',3)">Right</button>
+</div>
+
+<div style="position: absolute;top:100px; left:700px">
+  <div *ngFor="let listener of listeners">
+    <span style="color: lightgreen">{{listener.device.description}}- {{listener.device.currentValue}}</span>
+  </div>
+</div>

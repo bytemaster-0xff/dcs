@@ -1,0 +1,59 @@
+<div style="color:lightgreen"  >RIGHT - {{aircraftName}}</div>
+
+<app-RadialGauge [start]="0" [degrees]="280" [units]="' mph'" [segment-count]="7" [minor-segment-count]="35" label="M.P.H." [currentValue]="ias" [max]="700" 
+   [red-start]="510" [red-end]="700" style="position: absolute;top:80px; left:10px;"></app-RadialGauge>
+      
+<app-Altimeter style="position: absolute;left:260px; top:80px" [minor-segment-count]="50" [units]="' ft'" label="ALTITUDE" [currentValue]="23450"></app-Altimeter>
+
+<app-RadialGauge [start]="0" [degrees]="360" [units]="' deg'" label="HDG" [currentValue]="heading" [max]="360" 
+      style="left:510px;position: absolute;top:80px"></app-RadialGauge>
+
+<app-RadialGauge [start]="210" [degrees]="320" [max]="45" [segment-count]="9" [green-start]="16" [green-end]="24" [minor-segment-count]="45" 
+  [currentValue]="rpmValue" label="RPM x100" [units]="' x100'"
+  style="position: absolute;left:10px;top:330px;"></app-RadialGauge>
+
+<app-RadialGauge [start]="260" [degrees]="300" [minor-segment-count]="50" [segment-count]="10" [units]="' in Hg'" [min]="0" [max]="70" [radius]="100" 
+  [green-start]="26" [green-end]="36" label="MANIFOLD" [currentValue]="manifoldPressure" 
+  style="position: absolute;left: 260px; top:330px"></app-RadialGauge>
+  
+<app-variometer [radius]="100" [currentValue]="-1.2" style="position: absolute;left: 510px; top:330px"></app-variometer>
+
+<span stye="position:absolute;top 510px; left:250px;color:white">Fuel</span>
+<app-RadialGauge [segment-count]="4" [start]="245" [degrees]="230" [max]="92" [units]="' gal'" [minor-segment-count]="12"
+  [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Left" [currentValue]="fuelLeft" 
+  style="position: absolute;left: 10px; top:580px"></app-RadialGauge>
+
+<app-RadialGauge [segment-count]="4" [start]="245" [degrees]="230" [max]="92" [units]="' gal'" [minor-segment-count]="12"
+  [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Right" [currentValue]="fuelRight" 
+  style="position: absolute;left: 180px; top:580px"></app-RadialGauge>
+
+<app-turn-slip [radius]="80" style="position: absolute;left: 350px; top:580px"></app-turn-slip>  
+
+<app-temperature [red-start]="40" [red-end]="50" [green-start]="10" [green-end]="40" [radius]="60" [currentValue]="130" label="CARB. TEMP" style="position: absolute;left: 10px; top:750px"></app-temperature>
+<app-temperature [radius]="60" [currentValue]="15" label="COOLANT" style="position: absolute;left: 180px; top:750px"></app-temperature>
+
+<app-oil-fuel-gauge [radius]="100" style="position: absolute; top: 750px; left:600px" ></app-oil-fuel-gauge>
+
+<button (mousedown)="startAction('SAFE_LND_GEAR_LT_TEST')" (mouseup)="endAction('SAFE_LND_GEAR_LT_TEST')" >Safe Test</button>
+<button (mousedown)="startAction('UNSAFE_LND_GEAR_LT_TEST')" (mouseup)="endAction('UNSAFE_LND_GEAR_LT_TEST')" >Un Safe Test</button>
+<button (mousedown)="startAction('PRIMER')" (mouseup)="endAction('PRIMER')" >Prime</button>
+<button (mousedown)="startAction('STARTER')" (mouseup)="endAction('STARTER')" >Start</button>
+
+<button (click)="toggleBat()">Battery</button>
+<button (click)="toggleGenerator()">Generator</button>
+
+<div>
+  Fuel Valve
+</div>
+<div>
+  <button (click)="setValue('FUEL_SELECTOR_VALVE',0)">Off</button>
+  <button (click)="setValue('FUEL_SELECTOR_VALVE',1)">Left</button>
+  <button (click)="setValue('FUEL_SELECTOR_VALVE',2)">Fuselage</button>
+  <button (click)="setValue('FUEL_SELECTOR_VALVE',3)">Right</button>
+</div>
+
+<div style="position: absolute;top:100px; left:800px">
+  <div *ngFor="let listener of listeners">
+    <span style="color: lightgreen">{{listener.device.description}}- {{listener.device.currentValue}}</span>
+  </div>
+</div>

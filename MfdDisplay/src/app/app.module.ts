@@ -8,19 +8,32 @@ import { VarioMeterComponent } from './VarioMeter/VarioMeter.component';
 import { TurnSlipComponent } from './TurnSlip/TurnSlip.component';
 import { TemperatureComponent } from './Temperature/Temperature.component';
 import { OilFuelGaugeComponent } from './OilFuelGauge/OilFuelGauge.component';
+import { RouterModule, Routes } from '@angular/router';
+import { MfdLeftComponent } from './mfd-left/mfd-left.component';
+import { MfdRightComponent } from './mfd-right/mfd-right.component';
+
+const routes: Routes = [
+  { path: 'mfd/left', component: MfdLeftComponent },
+  { path: 'mfd/right', component: MfdRightComponent },
+  { path: 'home', component: AppComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+];
 
 @NgModule({
-  declarations: [						
+  declarations: [
     AppComponent,
-      RadialGaugeComponent,
-      AltimeterComponent,
-      VarioMeterComponent,
-      TurnSlipComponent,
-      TemperatureComponent,
-      OilFuelGaugeComponent
-   ],
+    RadialGaugeComponent,
+    AltimeterComponent,
+    VarioMeterComponent,
+    TurnSlipComponent,
+    TemperatureComponent,
+    OilFuelGaugeComponent,
+    MfdRightComponent,
+    MfdLeftComponent,
+  ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    RouterModule.forRoot(routes)
   ],
   providers: [],
   bootstrap: [AppComponent]
