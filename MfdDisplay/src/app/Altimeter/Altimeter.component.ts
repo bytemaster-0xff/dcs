@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DcsClientService } from '../dcsclient.service';
 import { RadialGaugeComponent } from '../RadialGauge/RadialGauge.component';
 
 @Component({
@@ -8,8 +9,8 @@ import { RadialGaugeComponent } from '../RadialGauge/RadialGauge.component';
 })
 export class AltimeterComponent extends RadialGaugeComponent implements OnInit {
 
-  constructor() {
-    super();
+  constructor(dcsClient: DcsClientService) {
+    super(dcsClient);
   }
 
   pointer10KFoot = "";
@@ -20,8 +21,7 @@ export class AltimeterComponent extends RadialGaugeComponent implements OnInit {
   tenKY: number;
   center: number;
 
-  set10KPointer(value: number)
-  {
+  set10KPointer(value: number) {
     value *= 10;
     let workingValue = (((value - this.min) / this.max) * this.degrees);
     let corrected = (workingValue + this.start) - 90;
@@ -41,7 +41,7 @@ export class AltimeterComponent extends RadialGaugeComponent implements OnInit {
 
     let tipY = this.center + Math.sin(radians) * (this.radius * 0.95);
     let tipX = this.center + Math.cos(radians) * (this.radius * 0.95);
-    
+
     let pointerStartY = this.center + Math.sin(radians) * (this.radius * 0.90);
     let pointerStartX = this.center + Math.cos(radians) * (this.radius * 0.90);
 
@@ -51,8 +51,7 @@ export class AltimeterComponent extends RadialGaugeComponent implements OnInit {
     this.pointer10KFoot = `M${pointerStartX} ${pointerStartY} L${startLeftX} ${startLeftY} L${startRightX} ${startRightY} Z`;
   }
 
-  set1KPointer(value: number)
-  {
+  set1KPointer(value: number) {
     value *= 10;
     let workingValue = (((value - this.min) / this.max) * this.degrees);
     let corrected = (workingValue + this.start) - 90;
@@ -63,7 +62,7 @@ export class AltimeterComponent extends RadialGaugeComponent implements OnInit {
     const radians = (corrected) * Math.PI / 180;
     const radiansLeft = (leftAngle) * (Math.PI / 180);
     const radiansRight = (rightAngle) * (Math.PI / 180);
-   
+
     let tipY = this.center + Math.sin(radians) * (this.radius * 0.5);
     let tipX = this.center + Math.cos(radians) * (this.radius * 0.5);
 
@@ -82,8 +81,7 @@ export class AltimeterComponent extends RadialGaugeComponent implements OnInit {
     this.pointer1KFoot = `M${rightStartX} ${rightStartY} L${leftStartX} ${leftStartY} L${leftX} ${leftY} L${tipX} ${tipY} L${rightX} ${rightY} Z`;
   }
 
-  set100FtPointer(value: number)
-  {
+  set100FtPointer(value: number) {
     value *= 10;
     let workingValue = (((value - this.min) / this.max) * this.degrees);
     let corrected = (workingValue + this.start) - 90;
@@ -112,20 +110,20 @@ export class AltimeterComponent extends RadialGaugeComponent implements OnInit {
 
     this.pointer100Foot = `M${rightStartX} ${rightStartY} L${leftStartX} ${leftStartY} L${leftX} ${leftY} L${tipX} ${tipY} L${rightX} ${rightY} Z`;
   }
-  
+
   ngOnInit() {
     this.center = this.radius + 2 + this.bezel;
     this.segmentCount = 10
     this.max = 10;
     super.ngOnInit();
   }
-  
-  setPointer(value: number) : void {
+
+  setPointer(value: number): void {
     this.value = value;
 
     this.valueLabel = value.toFixed(this.numberDecimal) + this.units;
     this.set100FtPointer((value % 1000) / 1000);
-    this.set1KPointer((value % 10000) / 10000); 
+    this.set1KPointer((value % 10000) / 10000);
     this.set10KPointer((value % 100000) / 100000);
   }
 }
