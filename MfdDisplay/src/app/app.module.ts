@@ -11,16 +11,18 @@ import { OilFuelGaugeComponent } from './OilFuelGauge/OilFuelGauge.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MfdLeftComponent } from './mfd-left/mfd-left.component';
 import { MfdRightComponent } from './mfd-right/mfd-right.component';
+import { SystemDetailsComponent } from './SystemDetails/SystemDetails.component';
 
 const routes: Routes = [
   { path: 'mfd/left', component: MfdLeftComponent },
   { path: 'mfd/right', component: MfdRightComponent },
+  { path: 'sys', component: SystemDetailsComponent },
   { path: 'home', component: AppComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     RadialGaugeComponent,
     AltimeterComponent,
@@ -30,7 +32,8 @@ const routes: Routes = [
     OilFuelGaugeComponent,
     MfdRightComponent,
     MfdLeftComponent,
-  ],
+      SystemDetailsComponent
+   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes)

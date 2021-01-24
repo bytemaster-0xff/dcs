@@ -1,10 +1,10 @@
 <svg [attr.height]="(radius * 2) + (bezel * 2) + 5" [attr.width]="(radius *2) + (bezel * 2) + 5" font-family="arial">
   <defs>
     <filter id="shadow">
-      <feDropShadow dx="5" dy="5" stdDeviation="0.2" flood-color="black" />
+      <feDropShadow dx="5" dy="5" stdDeviation="0.2" flood-color="#444" />
     </filter>
   </defs>
-  <path [attr.d]="bezelPath" fill="#222222" filter="url(#shadow)"/>
+  <path [attr.d]="bezelPath" fill="#000" filter="url(#shadow)"/>
 
   <circle [attr.cx]="fullWidth * 0.1" [attr.cy]="fullHeight * 0.1" [attr.r]="7" fill="black" />
   <circle [attr.cx]="fullWidth * 0.9" [attr.cy]="fullHeight * 0.1" [attr.r]="7" fill="black" />
