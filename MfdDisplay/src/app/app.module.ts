@@ -12,9 +12,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { MfdLeftComponent } from './mfd-left/mfd-left.component';
 import { MfdRightComponent } from './mfd-right/mfd-right.component';
 import { SystemDetailsComponent } from './SystemDetails/SystemDetails.component';
+import { MfdCoreComponent } from './mfd-core/mfd-core.component';
+import { AoAComponentComponent } from './AoAComponent/AoAComponent.component';
 
 const routes: Routes = [
   { path: 'mfd/left', component: MfdLeftComponent },
+  { path: 'gauge/aoa', component: AoAComponentComponent },
   { path: 'mfd/right', component: MfdRightComponent },
   { path: 'sys', component: SystemDetailsComponent },
   { path: 'home', component: AppComponent },
@@ -22,7 +25,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [	
+  declarations: [
     AppComponent,
     RadialGaugeComponent,
     AltimeterComponent,
@@ -31,8 +34,10 @@ const routes: Routes = [
     TemperatureComponent,
     OilFuelGaugeComponent,
     MfdRightComponent,
+    MfdCoreComponent,
+    SystemDetailsComponent,
     MfdLeftComponent,
-      SystemDetailsComponent
+      AoAComponentComponent
    ],
   imports: [
     BrowserModule,

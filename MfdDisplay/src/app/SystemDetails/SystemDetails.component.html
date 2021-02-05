@@ -1,3 +1,8 @@
-<p>
-  SystemDetails works!
-</p>
+<div style="position: absolute;top:100px; left:000px;width:600px;background-color: black">
+  <table>
+    <tr style="color: lightgreen;font-size:large" *ngFor="let listener of dcsClient.listeners">
+      <td style="width:300px;float:left;">{{listener.device.description}}</td>
+      <td style="width:200px;font-weight: bold;">{{listener.device.currentValue}}</td>
+    </tr>
+  </table>
+</div>

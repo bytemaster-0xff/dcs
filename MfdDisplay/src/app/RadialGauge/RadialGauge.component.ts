@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { createProviderInstance } from '@angular/core/src/view/provider';
+import { DcsClientService } from '../dcsclient.service';
 import { Line } from '../TrackedDevice';
 
 @Component({
@@ -13,30 +14,30 @@ export class RadialGaugeComponent implements OnInit {
   pointerY = 30;
   segments: Line[] = [];
   minorSegments: Line[] = [];
-  valueLabel = "0.0";
+  valueLabel = '0.0';
   centerX: number;
   centerY: number;
 
   fullWidth: number;
   fullHeight: number;
 
-  pathInTolerance = "";
-  pathUnderTolerance = "";
-  pathOverTolerance = "";
+  pathInTolerance = '';
+  pathUnderTolerance = '';
+  pathOverTolerance = '';
 
-  bezelPath = "M0 0";
+  bezelPath = 'M0 0';
 
-  constructor() { }
+  constructor(private dcsClient: DcsClientService) { }
 
   renderMinorSegements() {
     const segmentSize = this.degrees / this.minorSegmentCount;
     for (let idx = this.start; idx <= this.start + this.degrees; idx += segmentSize) {
       const radians = (idx - 90) * Math.PI / 180;
-      let y = Math.sin(radians);
-      let x = Math.cos(radians);
-      let segStart = this.radius - this.markerLen / 2;
-     
-     this.minorSegments.push({
+      const y = Math.sin(radians);
+      const x = Math.cos(radians);
+      const segStart = this.radius - this.markerLen / 2;
+
+      this.minorSegments.push({
         x1: x * segStart + this.centerX, y1: y * segStart + this.centerY,
         x2: x * (this.radius - 1) + this.centerX, y2: y * (this.radius - 1) + this.centerY,
       });
@@ -47,21 +48,21 @@ export class RadialGaugeComponent implements OnInit {
 
   renderMajorSegments() {
     const segmentSize = this.degrees / this.segmentCount;
-   
+
     for (let idx = this.start; idx <= this.start + this.degrees; idx += segmentSize) {
       const radians = (idx - 90) * Math.PI / 180;
-      let y = Math.sin(radians);
-      let x = Math.cos(radians);
-      let segStart = this.radius - this.markerLen;
-      let labelStart = this.radius - this.markerLen * 2;
-     
+      const y = Math.sin(radians);
+      const x = Math.cos(radians);
+      const segStart = this.radius - this.markerLen;
+      const labelStart = this.radius - this.markerLen * 2;
+
       const numerator = idx - this.start;
-      const denominator =  this.degrees;
+      const denominator = this.degrees;
       const pct = numerator / denominator;
       const tickLabel = (pct * (this.max - this.min)) + this.min;
-     
+
       const label = idx < (this.start + this.degrees) || this.degrees < 360 ? tickLabel.toFixed(this.numberDecimal) : '';
-       
+
       this.segments.push({
         x1: x * segStart + this.centerX, y1: y * segStart + this.centerY,
         x2: x * this.radius + this.centerX, y2: y * this.radius + this.centerY,
@@ -100,27 +101,27 @@ export class RadialGaugeComponent implements OnInit {
     this.renderBezel();
     this.renderMajorSegments();
 
-    if(this.minorSegmentCount > 0)
-    {
+    if (this.minorSegmentCount > 0) {
       this.renderMinorSegements();
     }
 
-    this.setPointer(this.value); 
+    this.setPointer(this.value);
 
-    if(this.greenStart !== null && this.greenEnd !== null)
-    {
+    if (this.greenStart !== null && this.greenEnd !== null) {
       this.populateInTolerance();
     }
- 
-    if(this.redStart !== null && this.redEnd !== null)
-    {
+
+    if (this.redStart !== null && this.redEnd !== null) {
       this.pathUnderTolerance = this.populateOutOfTolerance(this.redStart, this.redEnd);
     }
-    
-    if(this.redStart2 !== null && this.redEnd2 !== null)
-    {
+
+    if (this.redStart2 !== null && this.redEnd2 !== null) {
       this.pathOverTolerance = this.populateOutOfTolerance(this.redStart2, this.redEnd2);
-   }
+    }
+
+    if (this.system && this.field) {
+      this.dcsClient.registerListener(this.system, this.field, (value) => { this.setPointer(value / 1);  });
+    }
   }
 
   populateInTolerance() {
@@ -136,7 +137,7 @@ export class RadialGaugeComponent implements OnInit {
     let endY = this.centerY + Math.sin((endDegrees) * (Math.PI / 180)) * (this.radius * 0.9);
     let endX = this.centerX + Math.cos((endDegrees) * (Math.PI / 180)) * (this.radius * 0.9);
 
-    this.pathInTolerance = `M${startX} ${startY} A ${this.radius} ${this.radius} ${end-start}, 0 1, ${endX} ${endY}`;
+    this.pathInTolerance = `M${startX} ${startY} A ${this.radius} ${this.radius} ${end - start}, 0 1, ${endX} ${endY}`;
   }
 
   populateOutOfTolerance(startValue: number, endValue: number) {
@@ -152,38 +153,38 @@ export class RadialGaugeComponent implements OnInit {
     let endY = this.centerY + Math.sin((endDegrees) * (Math.PI / 180)) * (this.radius * 0.9);
     let endX = this.centerX + Math.cos((endDegrees) * (Math.PI / 180)) * (this.radius * 0.9);
 
-    return `M${startX} ${startY} A ${this.radius} ${this.radius} ${end-start}, 0 1, ${endX} ${endY}`;
+    return `M${startX} ${startY} A ${this.radius} ${this.radius} ${end - start}, 0 1, ${endX} ${endY}`;
   }
 
   setPointer(value: number): void {
-      this.value = value;
-      this.valueLabel = value.toFixed(this.numberDecimal) + this.units;
-      let workingValue = (((value - this.min) / (this.max - this.min)) * this.degrees);
-      let corrected = (workingValue + this.start) - 90;
+    this.value = value;
+    this.valueLabel = value.toFixed(this.numberDecimal) + this.units;
+    let workingValue = (((value - this.min) / (this.max - this.min)) * this.degrees);
+    let corrected = (workingValue + this.start) - 90;
 
-      let leftAngle = corrected - 5;
-      let rightAngle = + corrected + 5;
+    let leftAngle = corrected - 5;
+    let rightAngle = + corrected + 5;
 
-      const radians = (corrected) * Math.PI / 180;
-      const radiansLeft = (leftAngle) * (Math.PI / 180);
-      const radiansRight = (rightAngle) * (Math.PI / 180);
+    const radians = (corrected) * Math.PI / 180;
+    const radiansLeft = (leftAngle) * (Math.PI / 180);
+    const radiansRight = (rightAngle) * (Math.PI / 180);
 
-      let leftStartY = this.centerY + Math.sin((corrected - 90) * (Math.PI / 180)) * (this.radius * 0.03);
-      let leftStartX = this.centerX + Math.cos((corrected - 90) * (Math.PI / 180)) * (this.radius * 0.03);
-  
-      let rightStartY = this.centerY + Math.sin((corrected + 90) * (Math.PI / 180)) * (this.radius * 0.03);
-      let rightStartX = this.centerX + Math.cos((corrected + 90) * (Math.PI / 180)) * (this.radius * 0.03);
-  
-      let tipY = this.centerY + Math.sin(radians) * (this.radius * 0.75);
-      let tipX = this.centerX + Math.cos(radians) * (this.radius * 0.75);
+    let leftStartY = this.centerY + Math.sin((corrected - 90) * (Math.PI / 180)) * (this.radius * 0.03);
+    let leftStartX = this.centerX + Math.cos((corrected - 90) * (Math.PI / 180)) * (this.radius * 0.03);
 
-      let leftY = this.centerY + Math.sin(radiansLeft) * (this.radius * 0.6);
-      let leftX = this.centerX + Math.cos(radiansLeft) * (this.radius * 0.6);
+    let rightStartY = this.centerY + Math.sin((corrected + 90) * (Math.PI / 180)) * (this.radius * 0.03);
+    let rightStartX = this.centerX + Math.cos((corrected + 90) * (Math.PI / 180)) * (this.radius * 0.03);
 
-      let rightY = this.centerY + Math.sin(radiansRight) * (this.radius * 0.6);
-      let rightX = this.centerX + Math.cos(radiansRight) * (this.radius * 0.6);
+    let tipY = this.centerY + Math.sin(radians) * (this.radius * 0.75);
+    let tipX = this.centerX + Math.cos(radians) * (this.radius * 0.75);
 
-      this.pointer = `M${rightStartX} ${rightStartY} L${leftStartX} ${leftStartY} L${leftX} ${leftY} L${tipX} ${tipY} L${rightX} ${rightY} Z`;
+    let leftY = this.centerY + Math.sin(radiansLeft) * (this.radius * 0.6);
+    let leftX = this.centerX + Math.cos(radiansLeft) * (this.radius * 0.6);
+
+    let rightY = this.centerY + Math.sin(radiansRight) * (this.radius * 0.6);
+    let rightX = this.centerX + Math.cos(radiansRight) * (this.radius * 0.6);
+
+    this.pointer = `M${rightStartX} ${rightStartY} L${leftStartX} ${leftStartY} L${leftX} ${leftY} L${tipX} ${tipY} L${rightX} ${rightY} Z`;
   }
 
   pointer = "M100 100 L90 80 L30 30 L95 105 Z";
@@ -220,4 +221,7 @@ export class RadialGaugeComponent implements OnInit {
   @Input('red-end') redEnd: number = null;
   @Input('red-start2') redStart2: number = null;;
   @Input('red-end2') redEnd2: number = null;
+
+  @Input('system') system: string = null;
+  @Input('field') field: string = null;
 }

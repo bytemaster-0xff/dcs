@@ -7,17 +7,17 @@
 <span stye="position:absolute;top 510px; left:250px;color:white">Fuel</span>
 
 <app-RadialGauge [segment-count]="4" [start]="245" [degrees]="230" [max]="92" [units]="' gal'" [minor-segment-count]="12"
-  [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Left" [currentValue]="fuelLeft" 
+[system]="'Fuel System'" [field]="'FUEL_TANK_RIGHT'"
+[red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Left" 
   style="position: absolute;left: 30px; top:380px"></app-RadialGauge>
 
 <app-RadialGauge [segment-count]="4" [start]="245" [degrees]="230" [max]="92" [units]="' gal'" [minor-segment-count]="12"
-  [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Right" [currentValue]="fuelRight" 
+  [system]="'Fuel System'" [field]="'FUEL_TANK_RIGHT'" [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Right"  
   style="position: absolute;left: 280px; top:380px"></app-RadialGauge>
 
 <app-RadialGauge [start]="260" [degrees]="300" [minor-segment-count]="50" [segment-count]="10" [units]="' in Hg'" [min]="0" [max]="70" [radius]="100" 
   [green-start]="26" [green-end]="36" label="MANIFOLD" [currentValue]="manifoldPressure" 
   style="position: absolute;left: 260px; top:330px"></app-RadialGauge>
-
 
 <div>
   Fuel Valve
@@ -28,9 +28,3 @@
   <button (click)="setValue('FUEL_SELECTOR_VALVE',2)">Fuselage</button>
   <button (click)="setValue('FUEL_SELECTOR_VALVE',3)">Right</button>
 </div>
-
-<!--<div style="position: absolute;top:100px; left:700px">
-  <div *ngFor="let listener of listeners">
-    <span style="color: lightgreen">{{listener.device.description}}- {{listener.device.currentValue}}</span>
-  </div>
-</div>-->
