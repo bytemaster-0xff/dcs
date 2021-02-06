@@ -10,8 +10,8 @@ import { DcsClientService} from '../dcsclient.service';
 })
 export class TemperatureComponent extends RadialGaugeComponent implements OnInit {
 
-  constructor(private wsClient: DcsClientService) {
-    super(wsClient);
+  constructor(private dscClient: DcsClientService) {
+    super(dscClient);
   }
 
   ngOnInit() {
@@ -25,7 +25,7 @@ export class TemperatureComponent extends RadialGaugeComponent implements OnInit
     this.degrees = 180;
     this.start = 270;
     this.segmentCount = 4;
-    this.minorSegmentCount = this.segmentCount * 4
+    this.minorSegmentCount = this.segmentCount * 4;
     this.renderMinorSegements();
     this.renderMajorSegments();
     this.renderBezel();

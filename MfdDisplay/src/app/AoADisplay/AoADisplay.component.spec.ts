@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { AoAComponentComponent } from './AoAComponent.component';
+import { AoADisplayComponent } from './AoADisplay.component';
 
-describe('AoAComponentComponent', () => {
-  let component: AoAComponentComponent;
-  let fixture: ComponentFixture<AoAComponentComponent>;
+describe('AoADisplayComponent', () => {
+  let component: AoADisplayComponent;
+  let fixture: ComponentFixture<AoADisplayComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AoAComponentComponent ]
+      declarations: [ AoADisplayComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AoAComponentComponent);
+    fixture = TestBed.createComponent(AoADisplayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

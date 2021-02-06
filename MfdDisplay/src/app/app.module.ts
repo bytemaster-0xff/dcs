@@ -13,11 +13,12 @@ import { MfdLeftComponent } from './mfd-left/mfd-left.component';
 import { MfdRightComponent } from './mfd-right/mfd-right.component';
 import { SystemDetailsComponent } from './SystemDetails/SystemDetails.component';
 import { MfdCoreComponent } from './mfd-core/mfd-core.component';
-import { AoAComponentComponent } from './AoAComponent/AoAComponent.component';
+import { AoADisplayComponent } from './AoADisplay/AoADisplay.component';
+import { AoAGaugeComponent } from './AoAGauge/AoAGauge.component';
 
 const routes: Routes = [
   { path: 'mfd/left', component: MfdLeftComponent },
-  { path: 'gauge/aoa', component: AoAComponentComponent },
+  { path: 'gauge/aoa', component: AoADisplayComponent },
   { path: 'mfd/right', component: MfdRightComponent },
   { path: 'sys', component: SystemDetailsComponent },
   { path: 'home', component: AppComponent },
@@ -37,8 +38,9 @@ const routes: Routes = [
     MfdCoreComponent,
     SystemDetailsComponent,
     MfdLeftComponent,
-      AoAComponentComponent
-   ],
+    AoADisplayComponent,
+    AoAGaugeComponent
+  ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes)

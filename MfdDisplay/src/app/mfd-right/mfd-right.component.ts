@@ -3,6 +3,7 @@ import * as aircraftProfile from '../Profiles/P51D.json';
 import * as commonData from '../Profiles/Common.json';
 import ExportDataParser from '../ExportDataParser';
 import { AircraftDevice, TrackedDevice, Line } from '../TrackedDevice';
+import { DcsClientService } from '../dcsclient.service';
 
 @Component({
   selector: 'app-mfd-right',
@@ -38,6 +39,10 @@ export class MfdRightComponent implements OnInit, OnDestroy {
 
   fuelLeft = 0;
   fuelRight = 0;
+
+constructor(protected dcsClient: DcsClientService) {
+
+}
 
   ngOnDestroy(): void {
     if (this.webSocket) {
@@ -133,20 +138,9 @@ export class MfdRightComponent implements OnInit, OnDestroy {
     this.registerListener('Fuel System', 'FUEL_SHUT_OFF_VALVE', (value) => { });
     this.registerListener('Fuel System', 'FUEL_PRESSURE', (value) => { });
     this.registerListener('Fuel System', 'FUEL_TANK_FUSELAGE', (value) => { });
-    this.registerListener('Fuel System', 'FUEL_TANK_LEFT', (value) => { this.fuelLeft = value / 566; });
-    this.registerListener('Fuel System', 'FUEL_TANK_RIGHT', (value) => { this.fuelRight = value / 566; });
+//    this.registerListener('Fuel System', 'FUEL_TANK_LEFT', (value) => { this.fuelLeft = value / 566; });
+  //  this.registerListener('Fuel System', 'FUEL_TANK_RIGHT', (value) => { this.fuelRight = value / 566; });
 
-    this.registerListener('Engine Control Panel', 'STARTER_COVER', (value) => { });
-
-    this.registerListener('Remote Compass', 'REMOTE_COMPASS_SET', (value) => { });
-    this.registerListener('Remote Compass', 'REMOTE_COMPASS_CRS', (value) => { });
-    this.registerListener('Remote Compass', 'REMOTE_COMPASS_HDG', (value) => { });
-
-    this.registerListener('Control System', 'RUDDER_TRIM', (value) => {console.log(value) });
-    this.registerListener('Front Switch Box', 'IGNITION', (value) => { });
-    this.registerListener('Control System', 'ELEVATOR_TRIM', (value) => { });
-    this.registerListener('Control System', 'FLAPS_CONTROL_HANDLE', (value) => { });
-    this.registerListener('Control System', 'AILERON_TRIM', (value) => { });
 
     this.dataProcess = new ExportDataParser();
     this.dataProcess.onDcsUpdate().subscribe(

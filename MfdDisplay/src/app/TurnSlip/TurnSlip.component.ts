@@ -7,17 +7,16 @@ import { RadialGaugeComponent } from '../RadialGauge/RadialGauge.component';
   templateUrl: './TurnSlip.component.html',
   styleUrls: ['./TurnSlip.component.css']
 })
-export class TurnSlipComponent extends RadialGaugeComponent implements OnInit { 
-  @Input('turn') turn : number = 0;
-  @Input('slip') slip : number = 0;
-  
+export class TurnSlipComponent extends RadialGaugeComponent implements OnInit {
+  @Input() turn = 0;
+  @Input() slip = 0;
+
   slipX = 50;
   slipY = 20;
   turnPath = 'M0 0';
   turnValue = 0;
   slipValue = 0;
 
-  
   constructor(dcsClient: DcsClientService) {
     super(dcsClient);
   }
