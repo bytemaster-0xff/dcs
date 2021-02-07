@@ -16,7 +16,7 @@ export class AoADisplayComponent implements OnInit {
   pitch = 0;
 
   ngOnInit() {
-    window.setInterval(() => {
+/*    window.setInterval(() => {
       this.bank += this.bankInterval;
       this.pitch += this.pitchInterval;
 
@@ -35,7 +35,6 @@ export class AoADisplayComponent implements OnInit {
       if (this.bank < -90) {
         this.bankInterval = .5;
       }
-    }, 50);
+    }, 50);*/
   }
-
 }

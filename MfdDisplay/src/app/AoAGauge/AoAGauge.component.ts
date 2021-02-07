@@ -14,13 +14,13 @@ export class AoAGaugeComponent implements OnInit {
   }
 
   @Input() set bank(value: number) {
-    this.bankTransform = `rotate(${value} 240 240)`;
+    this.bankTransform = `rotate(${value + 90} 240 240)`;
   }
 
   constructor() { }
 
   ngOnInit() {
-    this.bankTransform = `rotate(0 240 240)`;
+    this.bankTransform = `rotate(90 240 240)`;
     this.pitchTransform = `translate(0 0)`;
   }
 }
