@@ -15,18 +15,20 @@ import { SystemDetailsComponent } from './SystemDetails/SystemDetails.component'
 import { MfdCoreComponent } from './mfd-core/mfd-core.component';
 import { AoADisplayComponent } from './AoADisplay/AoADisplay.component';
 import { AoAGaugeComponent } from './AoAGauge/AoAGauge.component';
+import { MainComponent } from './main/main.component';
 
 const routes: Routes = [
   { path: 'mfd/left', component: MfdLeftComponent },
   { path: 'gauge/aoa', component: AoADisplayComponent },
   { path: 'mfd/right', component: MfdRightComponent },
   { path: 'sys', component: SystemDetailsComponent },
+  { path: 'main', component: MainComponent },
   { path: 'home', component: AppComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     RadialGaugeComponent,
     AltimeterComponent,
@@ -39,8 +41,9 @@ const routes: Routes = [
     SystemDetailsComponent,
     MfdLeftComponent,
     AoADisplayComponent,
-    AoAGaugeComponent
-  ],
+    AoAGaugeComponent,
+      MainComponent
+   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes)

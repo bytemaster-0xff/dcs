@@ -17,7 +17,7 @@
 
   <circle [attr.cx]="centerY" fill="#0" [attr.cy]="centerX" [attr.r]="radius + 6" fill="silver"  filter="url(#shadow)"/> 
   <circle [attr.cx]="radius + bezel" fill="black" [attr.cy]="radius + bezel" [attr.r]="radius" stroke="white" stroke-width="2" />
-    <g transform="translate(50,110)">
+    <g transform="translate(170,300)">
       <path d="M 0 0
       L 0 30 
       A 4 0.5, 180, 0 0, 100 30 
@@ -31,18 +31,17 @@
       A 4 0.5, -180, 0 1, 0 5"
       style="stroke:gray; fill:white" />
 
-      <circle [attr.cx]="slipX" [attr.cy]="slipY" r="8" fill="black" />
       <text x="50" y="55" font-size="14" fill="white" text-anchor="middle">2 MIN TURN</text>
     </g>
 
-    <g transform="translate(80,45)">
+    <g transform="translate(140,100)">
       <path d="M0 -7.5 L5 -2.5 L5 7.5 L-5 7.5 L-5 -2.5 Z" fill="white" transform="rotate(-15)" />  
     </g>
-    <g transform="translate(120,45)">
+    <g transform="translate(240,100)">
       <path d="M0 -7.5 L5 -2.5 L5 7.5 L-5 7.5 L-5 -2.5 Z" fill="white" transform="rotate(15)" />  
     </g>
 
-    <path d="M-6 -6 L6 -6 L6 2 L0 8 L-6 2 Z" fill="white" transform="translate(100,42)" />  
+    <path d="M-6 -6 L6 -6 L6 2 L0 8 L-6 2 Z" fill="white" transform="translate(100,100)" />  
 
     <text [attr.x]="centerY - 34" font-family="arial" y="58" font-size="14" fill="white" text-anchor="middle">L</text>
     <text [attr.x]="centerY + 34" font-family="arial" y="58" font-size="14" fill="white" text-anchor="middle">R</text>

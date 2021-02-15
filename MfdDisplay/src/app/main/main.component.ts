@@ -1,20 +1,22 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import * as aircraftProfile from '../Profiles/P51D.json';
-import * as commonData from '../Profiles/Common.json';
-import ExportDataParser from '../ExportDataParser';
-import { AircraftDevice, TrackedDevice, Line } from '../TrackedDevice';
+import { Component, OnInit } from '@angular/core';
 import { DcsClientService } from '../dcsclient.service';
+import ExportDataParser from '../ExportDataParser';
+import { Line, TrackedDevice } from '../TrackedDevice';
 
 @Component({
-  selector: 'app-mfd-right',
-  templateUrl: './mfd-right.component.html',
-  styleUrls: ['./mfd-right.component.css']
+  selector: 'app-main',
+  templateUrl: './main.component.html',
+  styleUrls: ['./main.component.css']
 })
-export class MfdRightComponent implements OnInit {
+export class MainComponent implements OnInit {
   title = 'MfdDisplay';
 
   lineLen = 200;
   interval = 2;
+  listeners: TrackedDevice[] = [];
+  webSocket: WebSocket;
+  dataProcess: ExportDataParser;
+
   aircraftName = 'No Aircraft';
 
   centerX = 150;
@@ -27,7 +29,7 @@ export class MfdRightComponent implements OnInit {
   rpmValue = 16;
   altitude = 0;
   heading = 0;
-  ias = 0;
+  airspeed = 0;
   segments: Line[] = [];
 
   oilTemperature = 0;
@@ -48,9 +50,13 @@ export class MfdRightComponent implements OnInit {
   slip = 0;
   turn = 0;
 
-constructor(protected dcsClient: DcsClientService) {
+  bank = 0;
+  pitch = 0;
 
-}
+  constructor(protected dcsClient: DcsClientService) {
+
+  }
+
   ngOnInit(): void {
     this.dcsClient.registerListener('Metadata', '_ACFT_NAME', (value) => { this.aircraftName = value; });
 
@@ -61,7 +67,7 @@ constructor(protected dcsClient: DcsClientService) {
 
     this.dcsClient.registerListener('Gauge Values', 'ALTIMETER_VALUE', (value) => { this.altitude = value; });
     this.dcsClient.registerListener('Gauge Values', 'HEADING_VALUE', (value) => { this.heading = value; });
-    this.dcsClient.registerListener('Gauge Values', 'AIRSPEED_MPH_VALUE', (value) => { this.ias = value; });
+    this.dcsClient.registerListener('Gauge Values', 'AIRSPEED_MPH_VALUE', (value) => { this.airspeed = value; });
     this.dcsClient.registerListener('Gauge Values', 'MANIFOLD_PRESSURE_VALUE', (value) => { this.manifoldPressure = value; });
     this.dcsClient.registerListener('Gauge Values', 'ENGINE_RPM_VALUE', (value) => { this.rpmValue = value / 100.0; });
     this.dcsClient.registerListener('Gauge Values', 'OIL_PRESSURE_VALUE', (value) => { this.oilPressure = value; });
@@ -75,6 +81,10 @@ constructor(protected dcsClient: DcsClientService) {
     this.dcsClient.registerListener('Light System', 'LANDING_GEAR_RED', (value) => { });
     this.dcsClient.registerListener('Electric System', 'AMMETER', (value) => { });
 
+    this.dcsClient.registerListener('Artificial Horizon', 'AHORIZON_BANK', (value) => {
+         this.bank = (((32768 - value) / 200.0) - 90); console.log(value); 
+      });
+    this.dcsClient.registerListener('Artificial Horizon', 'AHORIZON_PITCH', (value) => { this.pitch = (value - 32768) / 500.0; });
 
 
     this.dcsClient.registerListener('Engine System', 'CARB_TEMP', (value) => { this.carbTemperature = value / 1000.0; });

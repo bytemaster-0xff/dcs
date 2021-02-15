@@ -24,7 +24,7 @@ export class RadialGaugeComponent implements OnInit {
   pathInTolerance = '';
   pathUnderTolerance = '';
   pathOverTolerance = '';
-
+  pointer = 'M100 100 L90 80 L30 30 L95 105 Z';
   bezelPath = 'M0 0';
 
   constructor(private dcsClient: DcsClientService) { }
@@ -74,8 +74,8 @@ export class RadialGaugeComponent implements OnInit {
   }
 
   renderBezel() {
-    let bezelOffset1 = this.fullWidth * 0.25;
-    let bezelOffset2 = this.fullWidth * 0.04;
+    const bezelOffset1 = this.fullWidth * 0.25;
+    const bezelOffset2 = this.fullWidth * 0.04;
 
     this.bezelPath = `M${bezelOffset1} 0 `;
     this.bezelPath += `L${this.fullWidth - bezelOffset1} 0 `;
@@ -187,7 +187,7 @@ export class RadialGaugeComponent implements OnInit {
     this.pointer = `M${rightStartX} ${rightStartY} L${leftStartX} ${leftStartY} L${leftX} ${leftY} L${tipX} ${tipY} L${rightX} ${rightY} Z`;
   }
 
-  pointer = "M100 100 L90 80 L30 30 L95 105 Z";
+  
 
   @Input('start') start: number = 0;
   @Input('degrees') degrees: number = 360;

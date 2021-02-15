@@ -36,7 +36,7 @@
      font-weight="bold" text-anchor="middle" fill="white">{{segment.label}}</text>
 
   <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius + bezel"
-    [attr.y]="radius /1.5 + bezel">CLIMB</text>
+    [attr.y]="radius /1.5 + bezel">{{value}}</text>
     
    <text font-size="10" fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius * 0.4 + bezel"
     [attr.y]="(radius + bezel) - 14">UP</text>
@@ -53,4 +53,5 @@
     <line [attr.x1]="center" [attr.y1]="center" [attr.x2]="tenKX" [attr.y2]="tenKY" stroke="white" stroke-width="2" />
     <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.1" fill="#444" />
     <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.04" fill="black" />
+
 </svg>

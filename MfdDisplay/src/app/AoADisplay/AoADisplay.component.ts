@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DcsClientService } from '../dcsclient.service';
 
 @Component({
   selector: 'app-aoa-display',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AoADisplayComponent implements OnInit {
 
-  constructor() { }
+  constructor(protected dcsClient: DcsClientService) { }
 
   bankInterval = 0.5;
   pitchInterval = 0.5;
@@ -16,25 +17,29 @@ export class AoADisplayComponent implements OnInit {
   pitch = 0;
 
   ngOnInit() {
-/*    window.setInterval(() => {
-      this.bank += this.bankInterval;
-      this.pitch += this.pitchInterval;
+    this.dcsClient.registerListener('Artificial Horizon', 'AHORIZON_BANK', (value) => { this.bank = (value - 32768) / 100.0; });
+    this.dcsClient.registerListener('Artificial Horizon', 'AHORIZON_PITCH', (value) => { this.pitch = (value - 32768) / 100.0; });
 
-      if (this.pitch > 30) {
-        this.pitchInterval = -.5;
-      }
 
-      if (this.pitch < -30) {
-        this.pitchInterval = .5;
-      }
-
-      if (this.bank > 90) {
-        this.bankInterval = -.5;
-      }
-
-      if (this.bank < -90) {
-        this.bankInterval = .5;
-      }
-    }, 50);*/
+    /*    window.setInterval(() => {
+          this.bank += this.bankInterval;
+          this.pitch += this.pitchInterval;
+    
+          if (this.pitch > 30) {
+            this.pitchInterval = -.5;
+          }
+    
+          if (this.pitch < -30) {
+            this.pitchInterval = .5;
+          }
+    
+          if (this.bank > 90) {
+            this.bankInterval = -.5;
+          }
+    
+          if (this.bank < -90) {
+            this.bankInterval = .5;
+          }
+        }, 50);*/
   }
 }
