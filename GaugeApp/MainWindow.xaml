@@ -1,0 +1,142 @@
+﻿<Window x:Class="GaugeApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GaugeApp"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="ByteMaster DCS Cockpit Controller" Height="1200" Width="1600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <ComboBox IsEnabled="{Binding IsPortClosed}" ItemsSource="{Binding Ports}" DisplayMemberPath="." SelectedItem="{Binding SelectedPort, Mode=TwoWay}" />
+                <Button Command="{Binding OpenPortCommand}" Content="Open" Grid.Column="1"/>
+                <Button Command="{Binding ClosePortCommand}" Content="Close" Grid.Column="2"/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="600"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+            </Grid.RowDefinitions>
+            <ListBox HorizontalContentAlignment="Stretch"  ItemsSource="{Binding Settings}" Grid.Row="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Label}" />
+                            <TextBox  Text="{Binding Value,Mode=TwoWay}" Grid.Column="2" />
+                            <Button Command="{Binding UpdateValueCommand}" Content="TX" Width="36" Height="18" Grid.Column="3"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <ListView ItemsSource="{Binding Console}" Grid.Row="1" Background="Black" Foreground="LightGreen" FontFamily="Consolas" Name="ConsoleOutput"/>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                        <RowDefinition   Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBox Text="{Binding LeftServoMin, Mode=TwoWay}" Grid.Column="0"/>
+                    <TextBlock Text="Left Servo Raw (microseconds)" Grid.Column="1" HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding LeftServoMax,Mode=TwoWay}" Grid.Column="2" TextAlignment="Right"/>
+                    <Slider Value="{Binding LeftServoRaw, Mode=TwoWay}"  Minimum="{Binding LeftServoMin}"  Maximum="{Binding LeftServoMax}" Grid.Row="1" Grid.ColumnSpan="3"/>
+                    <TextBox Text="{Binding LeftServoRaw, FallbackValue=600}" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" />
+
+                    <TextBox  Text="{Binding RightServoMin, Mode=TwoWay}" Grid.Column="0" Grid.Row="2"/>
+                    <TextBlock Text="Right Servo Raw (microseconds)" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding RightServoMax, Mode=TwoWay}" Grid.Column="2" Grid.Row="2" TextAlignment="Right"/>
+                    <Slider Value="{Binding RightServoRaw, Mode=TwoWay}"  Minimum="{Binding RightServoMin}"  Maximum="{Binding RightServoMa}" Grid.Row="3" Grid.ColumnSpan="3" />
+                    <TextBox Text="{Binding RightServoRaw, FallbackValue=600}" Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" />
+
+                    <TextBox Text="{Binding LeftServoMinValue, Mode=TwoWay, FallbackValue=0}" Grid.Column="0" Grid.Row="4"/>
+                    <TextBlock Text="Left Servo Value" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding LeftServoMaxValue, Mode=TwoWay, FallbackValue=100}" Grid.Column="2" Grid.Row="4" TextAlignment="Right"/>
+                    <Slider Value="{Binding LeftServoValue, Mode=TwoWay}" Minimum="{Binding LeftServoMinValue}" Maximum="{Binding LeftServoMaxValue}"  Grid.Row="5" Grid.ColumnSpan="3" />
+                    <TextBox Text="{Binding LeftServoValue, FallbackValue=600}" Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" />
+
+                    <TextBox Text="{Binding RightServoMinValue, Mode=TwoWay, FallbackValue=0}" Grid.Column="0" Grid.Row="6"/>
+                    <TextBlock Text="Right Servo Value" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding RightServoMaxValue, Mode=TwoWay, FallbackValue=100}" Grid.Column="2" Grid.Row="6" TextAlignment="Right"/>
+                    <Slider Value="{Binding RightServoValue, Mode=TwoWay}" Minimum="{Binding RightServoMinValue}" Maximum="{Binding RightServoMaxValue}"  Grid.Row="7" Grid.ColumnSpan="3" />
+                    <TextBox Text="{Binding RightServoValue, FallbackValue=600}" Grid.Row="7" Grid.Column="4" VerticalAlignment="Center" />
+
+                    <TextBlock Text="Stepper (Steps)" Grid.Column="1" Grid.Row="8" HorizontalAlignment="Center"/>
+
+                    <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
+                        <TextBox Text="{Binding StepperRaw, Mode=TwoWay, FallbackValue=600}"  VerticalAlignment="Center" Width="60"  TextAlignment="Right"/>
+                        <Button Command="{Binding DecrementStepsCommand}" Content="-" Height="18" Width="24"/>
+                        <Button Command="{Binding IncrementStepsCommand}" Content="+" Height="18" Width="24" />
+                        <TextBlock Text="Step Size" VerticalAlignment="Center" />
+                        <TextBox Text="{Binding StepSize, Mode=TwoWay}" Width="60" VerticalAlignment="Center" TextAlignment="Right"/>
+                    </StackPanel>
+
+                    <TextBox Text="{Binding StepperValueMin, Mode=TwoWay, FallbackValue=0}" Grid.Column="0" Grid.Row="10"/>
+                    <TextBlock Text="Stepper Value" Grid.Column="1" Grid.Row="10" HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding StepperValueMax, Mode=TwoWay, FallbackValue=100}" Grid.Column="2" Grid.Row="10" TextAlignment="Right"/>
+                    <Slider Value="{Binding StepperValue, Mode=TwoWay}" Minimum="{Binding StepperValueMin}" Maximum="{Binding StepperValueMax}"  Grid.Row="11" Grid.ColumnSpan="3" />
+                    <TextBlock Text="{Binding StepperValue, FallbackValue=600}" Grid.Row="11" Grid.Column="4" VerticalAlignment="Center" />
+                </Grid>
+                <StackPanel Grid.Column="1">
+                    <Button Content="RESET" Command="{Binding SendResetCommand}" />
+                    <Button Content="ZERO" Command="{Binding SendZeroCommand}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding CommandText, Mode=TwoWay}" TextChanged="TextBox_TextChanged" KeyUp="TextBlock_KeyUp" />
+            <Button Grid.Column="1" Content="SEND" Command="{Binding SendTextCommand}" />
+        </Grid>
+    </Grid>
+</Window>

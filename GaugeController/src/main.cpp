@@ -108,8 +108,7 @@ void setSensor(int idx, int value)
     turn.writeMicroseconds(value);
     break;
   case 1: /* Slip */
-    slip.writeMicroseconds(value);
-    
+    slip.writeMicroseconds(value);    
     break;
   case 2: /* variometer */
     variometer.writeMicroseconds(value);  
