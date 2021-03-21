@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaugeApp", "GaugeApp.csproj", "{955FB10E-8D95-4D24-B25F-7456690B9818}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaugeApp.Tests", "..\GaugeApp.Tests\GaugeApp.Tests.csproj", "{7C4C4322-0982-4FE4-9996-486EC2854CF3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{955FB10E-8D95-4D24-B25F-7456690B9818}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{955FB10E-8D95-4D24-B25F-7456690B9818}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{955FB10E-8D95-4D24-B25F-7456690B9818}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C4C4322-0982-4FE4-9996-486EC2854CF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C4C4322-0982-4FE4-9996-486EC2854CF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C4C4322-0982-4FE4-9996-486EC2854CF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C4C4322-0982-4FE4-9996-486EC2854CF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
