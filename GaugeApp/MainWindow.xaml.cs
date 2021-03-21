@@ -23,7 +23,13 @@ namespace GaugeApp
 
         private void Console_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            ConsoleOutput.ScrollIntoView(ConsoleOutput.Items.Count - 1);
+            lock (this)
+            {
+                var lastItemIndex = ConsoleOutput.Items.Count - 1;
+                var listItem = ConsoleOutput.Items[lastItemIndex];
+                ConsoleOutput.Items.Refresh();
+                ConsoleOutput.ScrollIntoView(listItem);
+            }
         }
 
         private void TextBlock_KeyUp(object sender, KeyEventArgs e)

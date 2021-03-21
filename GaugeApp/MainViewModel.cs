@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using System.Runtime.CompilerServices;
+using OxyPlot;
 
 namespace GaugeApp
 {
@@ -27,12 +30,14 @@ namespace GaugeApp
 
             ClosePortCommand = new RelayCommand(ClosePort, () => _serialPort != null);
             SendTextCommand = new RelayCommand(SendText, () => _serialPort != null && !String.IsNullOrEmpty(CommandText));
-            NextTextCommand = new RelayCommand(NextText, () => _serialPort != null &&  _commandBufferIndex > 0);
+            NextTextCommand = new RelayCommand(NextText, () => _serialPort != null && _commandBufferIndex > 0);
             SendResetCommand = new RelayCommand(SendReset, () => _serialPort != null);
             PreviousTextCommand = new RelayCommand(PreviousText, () => _serialPort != null);
             SendZeroCommand = new RelayCommand(Zero, () => _serialPort != null);
             IncrementStepsCommand = new RelayCommand(() => StepperRaw += StepSize, () => _serialPort != null);
             DecrementStepsCommand = new RelayCommand(() => StepperRaw -= StepSize, () => _serialPort != null);
+            FitCurveCommand = new RelayCommand(FitCurve);
+            SendCoefficientsCommand = new RelayCommand(SendCoefficients, () => CurveFitModel.Coefficients != null && _serialPort != null);
         }
 
         #region Methods
@@ -52,7 +57,7 @@ namespace GaugeApp
                 _serialPort.DataReceived += _serialPort_DataReceived;
                 _serialPort.Open();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Could not open serial port: {ex.Message}");
                 _serialPort.Close();
@@ -67,6 +72,7 @@ namespace GaugeApp
             SendZeroCommand.RaiseCanExecuteChanged();
             IncrementStepsCommand.RaiseCanExecuteChanged();
             DecrementStepsCommand.RaiseCanExecuteChanged();
+            SendCoefficientsCommand.RaiseCanExecuteChanged();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPortClosed)));
         }
 
@@ -86,6 +92,7 @@ namespace GaugeApp
                 SendZeroCommand.RaiseCanExecuteChanged();
                 IncrementStepsCommand.RaiseCanExecuteChanged();
                 DecrementStepsCommand.RaiseCanExecuteChanged();
+                SendCoefficientsCommand.RaiseCanExecuteChanged();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPortClosed)));
             }
         }
@@ -95,6 +102,7 @@ namespace GaugeApp
             if (_serialPort != null)
             {
                 _serialPort.WriteLine(text);
+                Debug.WriteLine(text);
             }
         }
 
@@ -110,12 +118,12 @@ namespace GaugeApp
 
         public void SendText()
         {
-            if (_serialPort != null && !String.IsNullOrEmpty(CommandText)) 
+            if (_serialPort != null && !String.IsNullOrEmpty(CommandText))
             {
                 _serialPort.WriteLine(CommandText);
                 var topCommandItem = _commandBuffer.FirstOrDefault();
-                
-                if(topCommandItem != CommandText)
+
+                if (topCommandItem != CommandText)
                     _commandBuffer.Insert(0, CommandText);
 
                 _commandBufferIndex = 0;
@@ -123,9 +131,24 @@ namespace GaugeApp
             }
         }
 
+        public async void SendCoefficients()
+        {
+            for (var idx = 0; idx < CurveFitModel.Coefficients.Count; ++idx)
+            {
+                SendText($"set-p{idx + 1}-stepper {CurveFitModel.Coefficients[idx]}");
+                await Task.Delay(200);
+            }
+        }
+
+        public void FitCurve()
+        {
+            ChartModel = CurveFitModel.GetChartModel();
+            SendCoefficientsCommand.RaiseCanExecuteChanged();
+        }
+
         public void NextText()
         {
-            if(_commandBufferIndex > 0)
+            if (_commandBufferIndex > 0)
             {
                 _commandBufferIndex--;
                 CommandText = _commandBuffer[_commandBufferIndex];
@@ -134,8 +157,8 @@ namespace GaugeApp
 
         public void PreviousText()
         {
-            if(_commandBufferIndex < _commandBuffer.Count)
-            {                
+            if (_commandBufferIndex < _commandBuffer.Count)
+            {
                 CommandText = _commandBuffer[_commandBufferIndex];
                 _commandBufferIndex++;
             }
@@ -144,34 +167,72 @@ namespace GaugeApp
 
         private void _serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            
+
             _dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
                 while (_serialPort.BytesToRead > 0)
                 {
                     var data = _serialPort.ReadLine();
-                    Console.Add(data.Trim());
+                    Console.Add($"{DateTime.Now} - {data.Trim()}");
 
-                    var setting = Settings.OrderByDescending(set=>set.Label.Length).Where(st => data.StartsWith(st.Label)).FirstOrDefault();
-                    
+                    var setting = Settings.OrderByDescending(set => set.Label.Length).Where(st => data.StartsWith(st.Label)).FirstOrDefault();
+
                     if (setting != null)
                     {
-                     
+
                         setting.Value = data.Split(':')[1].Trim();
-                        switch(setting.Key)
+                        switch (setting.Key)
                         {
-                            case "set-min-left": LeftServoMin = Convert.ToInt32(setting.Value); LeftServoRaw = LeftServoMin; break;
-                            case "set-max-left": LeftServoMax = Convert.ToInt32(setting.Value); break;
-                            case "set-minvalue-left": LeftServoMinValue = Convert.ToDouble(setting.Value); LeftServoValue = LeftServoMinValue; break;
-                            case "set-maxvalue-left": LeftServoMaxValue = Convert.ToDouble(setting.Value); break;
+                            case "set-min-left": 
+                                _leftServoMin = Convert.ToInt32(setting.Value); 
+                                _leftServoRaw = LeftServoMin;
+                                RaisePropertyChanged(nameof(LeftServoMin));
+                                RaisePropertyChanged(nameof(LeftServoRaw));
+                                break;
+                            case "set-max-left": 
+                                _leftServoMax = Convert.ToInt32(setting.Value);
+                                RaisePropertyChanged(nameof(LeftServoMax));
+                                break;
+                            case "set-minvalue-left": 
+                                _leftServoMinValue = Convert.ToDouble(setting.Value); 
+                                _leftServoValue = LeftServoMinValue;
+                                RaisePropertyChanged(nameof(LeftServoMinValue));
+                                RaisePropertyChanged(nameof(LeftServoValue));
+                                break;
+                            case "set-maxvalue-left": 
+                                _leftServoMaxValue = Convert.ToDouble(setting.Value);
+                                RaisePropertyChanged(nameof(LeftServoMaxValue));
+                                break;
 
-                            case "set-min-right": RightServoMin = Convert.ToInt32(setting.Value); break;
-                            case "set-max-right": RightServoMax = Convert.ToInt32(setting.Value); RightServoRaw = RightServoMax; break;
-                            case "set-minvalue-right": RightServoMinValue = Convert.ToDouble(setting.Value); RightServoValue = RightServoMinValue; break;
-                            case "set-maxvalue-right": RightServoMaxValue = Convert.ToDouble(setting.Value); break;
+                            case "set-min-right": 
+                                _rightServoMin = Convert.ToInt32(setting.Value); 
+                                _rightServoRaw = RightServoMin;
+                                RaisePropertyChanged(nameof(RightServoMin));
+                                RaisePropertyChanged(nameof(RightServoRaw));
+                                break;
+                            case "set-max-right": 
+                                _rightServoMax = Convert.ToInt32(setting.Value);
+                                RaisePropertyChanged(nameof(RightServoMax));
+                                break;
+                            case "set-minvalue-right": 
+                                _rightServoMinValue = Convert.ToDouble(setting.Value); 
+                                RightServoValue = RightServoMinValue;
+                                RaisePropertyChanged(nameof(RightServoMinValue));
+                                RaisePropertyChanged(nameof(RightServoValue));
+                                break;
+                            case "set-maxvalue-right": 
+                                _rightServoMaxValue = Convert.ToDouble(setting.Value);
+                                RaisePropertyChanged(nameof(RightServoMaxValue));
+                                break;
 
-                            case "set-minvalue-stepper": StepperValueMin = Convert.ToDouble(setting.Value); break;
-                            case "set-maxvalue-stepper": StepperValueMax= Convert.ToDouble(setting.Value); break;
+                            case "set-minvalue-stepper": 
+                                _stepperValueMin = Convert.ToDouble(setting.Value); 
+                                RaisePropertyChanged(nameof(StepperValueMin)); 
+                                break;
+                            case "set-maxvalue-stepper": 
+                                _stepperValueMax = Convert.ToDouble(setting.Value); 
+                                RaisePropertyChanged(nameof(StepperValueMax)); 
+                                break;
                         }
                     }
                 }
@@ -181,14 +242,14 @@ namespace GaugeApp
         public void Init()
         {
             RefreshPorts();
-            Settings.Add(new SettingsItem(SendText) { Label = "Left Servo Exists", Key = "set-exists-left", DataType = DataTypes.Boolean});
+            Settings.Add(new SettingsItem(SendText) { Label = "Left Servo Exists", Key = "set-exists-left", DataType = DataTypes.Boolean });
             Settings.Add(new SettingsItem(SendText) { Label = "Left Servo Address", Key = "set-addr-left", DataType = DataTypes.Address });
             Settings.Add(new SettingsItem(SendText) { Label = "Left Servo Min", Key = "set-min-left", DataType = DataTypes.Int });
             Settings.Add(new SettingsItem(SendText) { Label = "Left Servo Max", Key = "set-max-left", DataType = DataTypes.Int });
             Settings.Add(new SettingsItem(SendText) { Label = "Left Servo Min Val", Key = "set-minvalue-left", DataType = DataTypes.Double });
             Settings.Add(new SettingsItem(SendText) { Label = "Left Servo Max Val", Key = "set-maxvalue-left", DataType = DataTypes.Double });
 
-            Settings.Add(new SettingsItem(SendText) { Label = "Right Servo Exists", Key = "set-exists-right", DataType = DataTypes.Boolean});
+            Settings.Add(new SettingsItem(SendText) { Label = "Right Servo Exists", Key = "set-exists-right", DataType = DataTypes.Boolean });
             Settings.Add(new SettingsItem(SendText) { Label = "Right Servo Address", Key = "set-addr-right", DataType = DataTypes.Address });
             Settings.Add(new SettingsItem(SendText) { Label = "Right Servo Min", Key = "set-min-right", DataType = DataTypes.Int });
             Settings.Add(new SettingsItem(SendText) { Label = "Right Servo Max", Key = "set-max-right", DataType = DataTypes.Int });
@@ -208,7 +269,7 @@ namespace GaugeApp
             for (int idx = 1; idx <= 5; ++idx)
             {
                 Settings.Add(new SettingsItem(SendText) { Label = $"Stepper P{idx}", Key = $"set-p{idx}-stepper", DataType = DataTypes.Double });
-                Settings.Add(new SettingsItem(SendText) { Label = $"Stepper 2x P{idx}", Key = $"set-2x-p{idx}--stepper", DataType = DataTypes.Double });
+                Settings.Add(new SettingsItem(SendText) { Label = $"Stepper 2x P{idx}", Key = $"set-2xp{idx}--stepper", DataType = DataTypes.Double });
             }
         }
 
@@ -270,21 +331,21 @@ namespace GaugeApp
         DateTime _debounce = DateTime.MinValue;
 
         #region Left Servo
-        int _leftServo = 600;
+        int _leftServoRaw = 600;
         public int LeftServoRaw
         {
-            get => _leftServo;
+            get => _leftServoRaw;
             set
             {
-                if(_leftServo != value)
+                if (_leftServoRaw != value)
                 {
-                    _leftServo = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LeftServoRaw)));
+                    _leftServoRaw = value;
+                    RaisePropertyChanged();
                     _debounce = DateTime.Now;
                     Task.Run(async () =>
                     {
                         await Task.Delay(250);
-                        if((DateTime.Now - _debounce).TotalMilliseconds > 250)
+                        if ((DateTime.Now - _debounce).TotalMilliseconds > 250)
                             SendText($"left-raw {value}");
                     });
                 }
@@ -300,13 +361,14 @@ namespace GaugeApp
                 if (_leftServoValue != value)
                 {
                     _leftServoValue = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(_leftServoValue)));
+                    _debounce = DateTime.Now;
+                    RaisePropertyChanged();
                     Task.Run(async () =>
                     {
                         await Task.Delay(250);
                         if ((DateTime.Now - _debounce).TotalMilliseconds > 250)
                             SendText($"left {value}");
-                    });                    
+                    });
                 }
             }
         }
@@ -317,9 +379,12 @@ namespace GaugeApp
             get => _leftServoMinValue;
             set
             {
-                _leftServoMinValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LeftServoMinValue)));
-                SendText($"set-minvalue-left {value}");
+                if (_leftServoMinValue != value)
+                {
+                    _leftServoMinValue = value;
+                    RaisePropertyChanged();
+                    SendText($"set-minvalue-left {value}");
+                }
             }
         }
 
@@ -330,7 +395,7 @@ namespace GaugeApp
             set
             {
                 _leftServoMaxValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LeftServoMaxValue)));
+                RaisePropertyChanged();
                 SendText($"set-maxvalue-left {value}");
             }
         }
@@ -341,9 +406,13 @@ namespace GaugeApp
             get => _leftServoMin;
             set
             {
-                _leftServoMin = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LeftServoMin)));
-                SendText($"set-min-left {value}");
+                if (_leftServoMin != value)
+                {
+                    _leftServoMin = value;
+                    RaisePropertyChanged();
+                    SendText($"set-min-left {value}");
+                }
+
             }
         }
 
@@ -353,31 +422,34 @@ namespace GaugeApp
             get => _leftServoMax;
             set
             {
-                _leftServoMax = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LeftServoMax)));
-                SendText($"set-max-left {value}");
+                if (_leftServoMax != value)
+                {
+                    _leftServoMax = value;
+                    RaisePropertyChanged();
+                    SendText($"set-max-left {value}");
+                }
             }
         }
         #endregion        
 
         #region Right Servo
-        int _rightServo = 600;
+        int _rightServoRaw = 600;
         public int RightServoRaw
         {
-            get => _rightServo;
+            get => _rightServoRaw;
             set
             {
-                if (_rightServo != value)
+                if (_rightServoRaw != value)
                 {
-                    _rightServo = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RightServoRaw)));
+                    _rightServoRaw = value;
+                    RaisePropertyChanged();
                     _debounce = DateTime.Now;
                     Task.Run(async () =>
                     {
                         await Task.Delay(250);
                         if ((DateTime.Now - _debounce).TotalMilliseconds > 250)
                             SendText($"right-raw {value}");
-                    });                    
+                    });
                 }
             }
         }
@@ -391,13 +463,14 @@ namespace GaugeApp
                 if (_rightServoValue != value)
                 {
                     _rightServoValue = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(_rightServoValue)));
+                    RaisePropertyChanged();
+                    _debounce = DateTime.Now;
                     Task.Run(async () =>
                     {
                         await Task.Delay(250);
                         if ((DateTime.Now - _debounce).TotalMilliseconds > 250)
                             SendText($"right {value}");
-                    });                    
+                    });
                 }
             }
         }
@@ -409,7 +482,7 @@ namespace GaugeApp
             set
             {
                 _rightServoMinValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RightServoMinValue)));
+                RaisePropertyChanged();
                 SendText($"set-minvalue-right {value}");
             }
         }
@@ -420,9 +493,12 @@ namespace GaugeApp
             get => _rightServoMaxValue;
             set
             {
-                _rightServoMaxValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RightServoMaxValue)));
-                SendText($"set-maxvalue-right {value}");
+                if (_rightServoMaxValue != value)
+                {
+                    _rightServoMaxValue = value;
+                    RaisePropertyChanged();
+                    SendText($"set-maxvalue-right {value}");
+                }
             }
         }
 
@@ -432,9 +508,12 @@ namespace GaugeApp
             get => _rightServoMin;
             set
             {
-                _rightServoMin = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RightServoMin)));
-                SendText($"set-min-right {value}");
+                if (_rightServoMin != value)
+                {
+                    _rightServoMin = value;
+                    RaisePropertyChanged();
+                    SendText($"set-min-right {value}");
+                }
             }
         }
 
@@ -444,9 +523,12 @@ namespace GaugeApp
             get => _rightServoMax;
             set
             {
-                _rightServoMax = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RightServoMax)));
-                SendText($"set-max-right {value}");
+                if (_rightServoMax != value)
+                {
+                    _rightServoMax = value;
+                    RaisePropertyChanged();
+                    SendText($"set-max-right {value}");
+                }
             }
         }
         #endregion
@@ -459,14 +541,15 @@ namespace GaugeApp
             set
             {
                 _stepperRaw = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StepperRaw)));
+                RaisePropertyChanged();
+                _debounce = DateTime.Now;
                 Task.Run(async () =>
                 {
                     await Task.Delay(250);
                     if ((DateTime.Now - _debounce).TotalMilliseconds > 250)
                         SendText($"stepper-raw {value}");
                 });
-                
+
             }
         }
 
@@ -477,7 +560,7 @@ namespace GaugeApp
             set
             {
                 _stepSize = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StepSize)));
+                RaisePropertyChanged();
             }
         }
 
@@ -488,14 +571,15 @@ namespace GaugeApp
             set
             {
                 _stepperValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StepperValue)));
+                RaisePropertyChanged();
+                _debounce = DateTime.Now;
                 Task.Run(async () =>
                 {
                     await Task.Delay(250);
                     if ((DateTime.Now - _debounce).TotalMilliseconds > 250)
                         SendText($"stepper {value}");
                 });
-                
+
             }
         }
 
@@ -506,11 +590,10 @@ namespace GaugeApp
             set
             {
                 _stepperValueMin = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StepperValueMin)));
+                RaisePropertyChanged();
                 SendText($"set-minvalue-stepper {value}");
             }
         }
-
 
         private double _stepperValueMax = 0;
         public double StepperValueMax
@@ -519,7 +602,7 @@ namespace GaugeApp
             set
             {
                 _stepperValueMax = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StepperValueMax)));
+                RaisePropertyChanged();
                 SendText($"set-maxvalue-stepper {value}");
             }
         }
@@ -546,8 +629,40 @@ namespace GaugeApp
         public RelayCommand NextTextCommand { get; }
         public RelayCommand SendResetCommand { get; }
         public RelayCommand SendZeroCommand { get; }
+        public RelayCommand FitCurveCommand { get; }
+        public RelayCommand SendCoefficientsCommand { get; }
         public RelayCommand IncrementStepsCommand { get; }
         public RelayCommand DecrementStepsCommand { get; }
         #endregion
+
+
+        PlotModel _chartModel;
+        public PlotModel ChartModel
+        {
+            get => _chartModel;
+            set
+            {
+                _chartModel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        CurveFitData _curveFitModel = new CurveFitData();
+        public CurveFitData CurveFitModel
+        {
+            get => _curveFitModel;
+            set
+            {
+                _curveFitModel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private void RaisePropertyChanged([CallerMemberName] string memberName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
     }
 }
