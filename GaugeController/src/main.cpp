@@ -13,12 +13,8 @@ Stepper altitudeStepper(STEPS, 22, 24, 26, 28);
 Stepper headingStepper(STEPS, 30, 32, 34, 36);
 Stepper targetHeadingStepper(STEPS, 23, 25, 27, 29);
 
-Servo mph;
-Servo bank;
-Servo pitch;
 Servo turn;
 Servo slip;
-Servo variometer;
 /* PIN 2 - RPM */
 
 /*DcsBios::ServoOutput ahorizonBank(0x503e,10, 544, 2400);
@@ -79,21 +75,10 @@ void setup()
   Serial.println("Software Logistics - Aeronatics Division");
   Serial.println(">");
 
-  //DcsBios::setup();
-  ///initTestServos();
-
-  mph.writeMicroseconds(400);
-  mph.attach(3);
-  bank.writeMicroseconds(1500);
-  bank.attach(6);
-  pitch.writeMicroseconds(1170);
-  pitch.attach(5);
   turn.writeMicroseconds(1400);
   turn.attach(4);
   slip.writeMicroseconds(1400);
   slip.attach(3);
-  variometer.writeMicroseconds(1400);
-  variometer.attach(2);
 
   // put your setup code here, to run once:
 }
@@ -109,12 +94,6 @@ void setSensor(int idx, int value)
     break;
   case 1: /* Slip */
     slip.writeMicroseconds(value);    
-    break;
-  case 2: /* variometer */
-    variometer.writeMicroseconds(value);  
-    break;
-  case 3: 
-    mph.writeMicroseconds(value);    
     break;
   case 4:  
     pitch.writeMicroseconds(value);
