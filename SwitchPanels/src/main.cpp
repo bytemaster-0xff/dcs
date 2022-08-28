@@ -6,8 +6,9 @@
 #define DCSBIOS_DEFAULT_SERIAL
 #include "DcsBios.h"
 
+//#define AUX_PANEL
 //#define FUEL_IGN
-//#define TRIM_PANEL
+#define TRIM_PANEL
 //#define LANDING
 //#define GAUGE_BANK_1
 
@@ -19,6 +20,7 @@ DcsBios::ServoOutput engineRpm(0x5078, 11, 544, 2400);
 DcsBios::ServoOutput ahorizonBank(0x503e,10, 544, 2400);
 DcsBios::ServoOutput ahorizonPitch(0x5040,11, 544, 2400);
 #endif
+\
 
 //#define LANDING
 #ifdef LANDING
@@ -36,9 +38,9 @@ void initialize() {}
 #ifdef TRIM_PANEL
 DcsBios::SwitchMixture mixtureControl("MIXTURE_CONTROL", 2, 3);
 
-DcsBios::RotaryEncoder rudderTrim("RUDDER_TRIM", "-800", "+800", 4, 5);
-DcsBios::RotaryEncoder aileronTrim("AILERON_TRIM", "-800", "+800", 6, 7);
-DcsBios::RotaryEncoder elevatorTrime("ELEVATOR_TRIM", "-800", "+800", 8, 9);
+DcsBios::RotaryEncoder rudderTrim("RUDDER_TRIM", "-2400", "+2400", 4, 5);
+DcsBios::RotaryEncoder aileronTrim("AILERON_TRIM", "-2400", "+2400", 6, 7);
+DcsBios::RotaryEncoder elevatorTrime("ELEVATOR_TRIM", "-2400", "+2400", 8, 9);
 
 DcsBios::ServoOutput flapsControlHandleOutput(0x502a, 11, 544, 2400);
 
@@ -46,12 +48,11 @@ DcsBios::PotentiometerEWMA<5, 128, 5> propellerRpm("PROPELLER_RPM", A0);
 DcsBios::PotentiometerEWMA<5, 128, 5> carbColdAir("CARB_COLD_AIR", A1);
 DcsBios::PotentiometerEWMA<5, 128, 5> carbCoWarmAir("CARB_WARM_AIR", A2);
 DcsBios::PotentiometerEWMA<5, 128, 5> flapsControlHandle("FLAPS_CONTROL_HANDLE", A3);
-String VERISON = "TRIM_PANEL";
+String VERISON = "TRIM_PANEL";  
 
 void initialize() {}
 #endif
 
-#define AUX_PANEL
 #ifdef AUX_PANEL
 //DcsBios::Switch2Pos tailLts("AUX5_SW1", 5);
 //DcsBios::Switch2Pos wingLts("AUX5_SW2", 6);
@@ -83,6 +84,9 @@ DcsBios::Switch2Pos gen("GEN", 7);
 DcsBios::Switch2Pos amberRecLt("AMBR_REC_LT", 8);
 DcsBios::Switch2Pos greenRecLt("GRN_REC_LT", 9);
 DcsBios::Switch2Pos redRecLt("RED_REC_LT", 10);
+
+
+
 
 unsigned int mapAmmeter(unsigned int newValue) {  
     // right boundary = 800 = 200 amps
@@ -146,7 +150,7 @@ void setup()
   DcsBios::setup();  
   DcsBios::RegisterCommandCallback(cmdHandler);  
 #else
-  _servo.attach(11);  
+ _servo.attach(11);  
   Serial.begin(115200);
   Serial.println("Welcome - Calibration Mode");
 #endif  

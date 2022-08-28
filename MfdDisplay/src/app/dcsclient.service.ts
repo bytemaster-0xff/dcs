@@ -22,7 +22,7 @@ export class DcsClientService {
 
     public init() {
         console.log("Init service.");
-        this.webSocket = new WebSocket('ws://localhost:5010/api/websocket');
+        this.webSocket = new WebSocket('ws://10.1.1.38:5010/api/websocket');
         this.webSocket.onopen = (evt) => {
             console.log('opn');
             console.log(evt);

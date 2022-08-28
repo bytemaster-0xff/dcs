@@ -13,12 +13,17 @@ export class AoADisplayComponent implements OnInit {
   bankInterval = 0.5;
   pitchInterval = 0.5;
 
+  count = 0
   bank = 0;
   pitch = 0;
 
+  updated(){
+    this.count++;
+  }
+
   ngOnInit() {
     this.dcsClient.registerListener('Artificial Horizon', 'AHORIZON_BANK', (value) => { this.bank = (value - 32768) / 100.0; });
-    this.dcsClient.registerListener('Artificial Horizon', 'AHORIZON_PITCH', (value) => { this.pitch = (value - 32768) / 100.0; });
+    this.dcsClient.registerListener('Artificial Horizon', 'AHORIZON_PITCH', (value) => { this.pitch = (value - 32768) / 100.0; this.updated() });
 
 
     /*    window.setInterval(() => {

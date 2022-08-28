@@ -52,6 +52,11 @@
 
     <text [attr.y]="centerY + 60" [attr.x]="centerX" font-size="14" fill="white" text-anchor="middle">2 MIN TURN</text>
 
+
+    <text [attr.y]="centerY + 160" [attr.x]="centerX" font-size="14" fill="white" 
+    text-anchor="middle">{{turn}} {{slip}}</text>
+
+
     <circle [attr.cx]="ballX" fill="#333" [attr.cy]="ballY" [attr.r]="radius * 0.115" />
 
   </svg>

@@ -1,3 +1,5 @@
+<div style="background-color:olivedrab; width:1200pt; height:1200pt">
+
 <div style="color:lightgreen"  >RIGHT - {{aircraftName}}</div>
 
 <app-RadialGauge [start]="0" [degrees]="280" [units]="' mph'" [segment-count]="7" [minor-segment-count]="35" label="M.P.H." [currentValue]="ias" [max]="700" 
@@ -33,3 +35,5 @@
 <app-temperature [radius]="60" [currentValue]="coolantTemperature" label="COOLANT" style="position: absolute;left: 180px; top:750px"></app-temperature>
 
 <app-oil-fuel-gauge [oil-pressure]="oilPressure" [fuel-pressure]="fuelPressure" [oil-temperature]="oilTemperature" [radius]="100" style="position: absolute; top: 750px; left:600px" ></app-oil-fuel-gauge>
+
+</div>

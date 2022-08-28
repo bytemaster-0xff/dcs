@@ -1,3 +1,6 @@
+<div style="background-color:olivedrab; width:1024pt; height:1024pt">
+
+
 <div style="color:lightgreen"  >LEFT - {{aircraftName}}</div>
  
 <app-Altimeter style="position: absolute;left:260px; top:80px" [minor-segment-count]="50" [units]="' ft'" label="ALTITUDE" [currentValue]="23450"></app-Altimeter>
@@ -27,4 +30,5 @@
   <button (click)="setValue('FUEL_SELECTOR_VALVE',1)">Left</button>
   <button (click)="setValue('FUEL_SELECTOR_VALVE',2)">Fuselage</button>
   <button (click)="setValue('FUEL_SELECTOR_VALVE',3)">Right</button>
+</div>
 </div>

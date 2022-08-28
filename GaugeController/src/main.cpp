@@ -3,41 +3,51 @@
 #include <Stepper.h>
 
 #define DCSBIOS_DEFAULT_SERIAL
-#include "DcsBios.h"
+#include "./lib/DcsBios.h"
+#include "../include/AsyncStepper.h"
+#include "../include/RotaryEncoder.h"
 
 #include <Arduino.h>
 
 #define STEPS 2048
+long lastSteps = 0;
 
 Stepper altitudeStepper(STEPS, 22, 24, 26, 28);
-Stepper headingStepper(STEPS, 30, 32, 34, 36);
-Stepper targetHeadingStepper(STEPS, 23, 25, 27, 29);
+AsyncStepper  targetHeadingStepper(30, 32, 34, 36);
+AsyncStepper headingStepper(23, 25, 27, 29);
+
+RotaryEncoder headingAdjust(46, 48);
+RotaryEncoder targetHeadingAdjust(42,44);
+RotaryEncoder pressureAdjust(38, 40 );
+
+
+#define TEST_MODE_PIN 9
+
+
+void cmdHandler(unsigned char cmd, unsigned int address, int value)
+{
+  switch (cmd)
+  {
+  case 0x00:
+   // mainStepper->home();
+    //oldStepperValue = 0;
+    break;
+  }
+}
+
+bool isInTestMode()
+{
+  return digitalRead(TEST_MODE_PIN) == LOW;
+
+}
 
 Servo turn;
 Servo slip;
-/* PIN 2 - RPM */
 
-/*DcsBios::ServoOutput ahorizonBank(0x503e,10, 544, 2400);
-DcsBios::ServoOutput ahorizonPitch(0x5040,11, 544, 2400);
-DcsBios::ServoOutput engineRpm(0x5072,8, 544, 2400);
-DcsBios::ServoOutput engineRpm(0x5072,8, 544, 2400);*/
-
-DcsBios::ServoOutput flapsControlHandleOutput(0x502a, 9, 544, 2400);
-//DcsBios::ServoOutput flapsControlHandleOutput(0x502a, 10, 544, 2400);
+//DcsBios::ServoOutput flapsControlHandleOutput(0x502a, 9, 544, 2400);
+  //DcsBios::ServoOutput flapsControlHandleOutput(0x502a, 10, 544, 2400);
 
 Servo servo_s[15];
-
-void initTestServos()
-{
-  for (int idx = 2; idx <= 13; ++idx)
-  {
-    servo_s[idx + 1].attach(idx);
-  }
-
-  servo_s[0].attach(44);
-  servo_s[1].attach(45);
-  servo_s[2].attach(46);
-}
 
 byte buffer[128];
 byte indexBufferIndex = 0;
@@ -63,30 +73,86 @@ void resetParser()
   }
 }
 
-void setup()
-{
-  resetParser();
 
-  altitudeStepper.setSpeed(5);
-  headingStepper.setSpeed(5);
-  targetHeadingStepper.setSpeed(5);
-
-  Serial.begin(115200);
-  Serial.println("Software Logistics - Aeronatics Division");
-  Serial.println(">");
-
-  turn.writeMicroseconds(1400);
-  turn.attach(4);
-  slip.writeMicroseconds(1400);
-  slip.attach(3);
-
-  // put your setup code here, to run once:
+void setAltimeter(long altitude) {
+    double scaledValue = (double)altitude / 0.4875;
+    long steps = (long)scaledValue - lastSteps;
+    
+    altitudeStepper.step(steps);
+    lastSteps = steps;
 }
+
+void zeroAltimeter(long delta) {
+    double scaledValue = (double)delta / 0.4875;
+    altitudeStepper.step(-(long)scaledValue);
+    lastSteps = 0;
+}
+
+
+void setCompass(int32_t heading){
+  //double scaledValues = (double)heading * 5.7166;
+  //targetHeadingStepper.setTarget(-(uint32_t)scaledValues);
+  //headingStepper.setTarget((uint32_t)scaledValues);
+}
+
+  void onHdgDegChange(unsigned int newValue) {
+   // setCompass(newValue);  
+    Serial2.println("new heading " + String(newValue));
+  }
+
+
+  void onAltMslFtChange(unsigned int newValue) {
+    setAltimeter(newValue);
+  }
+
+  void onSlipballChange(unsigned int newValue) {
+    /* your code here */
+  }
+
+  void onTurnIndicatorChange(unsigned int newValue) {
+    /* your code here */
+
+  }
+
+void checkRotary() {
+  int8_t headingAdjustDelta = headingAdjust.loop();
+  int8_t targetAjustDelta = targetHeadingAdjust.loop(); 
+  int8_t pressureAdjustDelta = pressureAdjust.loop();
+
+  if(targetAjustDelta > 0){
+     targetHeadingStepper.step(-10); 
+  }
+  else if(targetAjustDelta < 0) {
+     targetHeadingStepper.step(+10);   
+  }
+
+  if(headingAdjustDelta > 0){
+     headingStepper.step( +15); 
+  }
+  else if(headingAdjustDelta < 0) {
+     headingStepper.step(- 15);   
+   }
+
+     if(pressureAdjustDelta > 0){
+     //altitudeStepper.step(30); 
+    Serial.println(headingStepper.getCurrent());
+  }
+  else if(pressureAdjustDelta < 0) {
+   //  altitudeStepper.step(- 30);   
+    Serial.println(headingStepper.getCurrent());
+   }
+}
+
+ISR(TIMER0_COMPA_vect)
+{ // timer0 interrupt 2kHz toggles pin 8
+  // headingStepper.update();
+  // targetHeadingStepper.update();
+}
+
+
 
 void setSensor(int idx, int value)
 {
-  Serial.println("Sending value: " + String(idx) + "=" + String(value));
-
   switch (idx)
   {
   case 0: /* Turn */
@@ -96,98 +162,154 @@ void setSensor(int idx, int value)
     slip.writeMicroseconds(value);    
     break;
   case 4:  
-    pitch.writeMicroseconds(value);
+   // pitch.writeMicroseconds(value);
     break;
   case 5:
-    bank.writeMicroseconds(value);
+   // bank.writeMicroseconds(value);
     break;
   case 6: /* Altitude */
-    altitudeStepper.step(value);
+    setAltimeter(value);
     break;
-  case 7: /* Heading */
-    headingStepper.step(value);
+  case 7:
+    zeroAltimeter(value);
     break;
-  case 8: /* Heading Set */
-    targetHeadingStepper.step(value);
+  case 8:
+    //altitudeStepper.step(-lastSteps);
+    lastSteps = 0;
+    break;
+  case 10: /* Heading */
+    setCompass(value);
+    break;
+  case 11: /* Heading Set */
     break;
   }
 
   Serial.println("completed.");
 }
 
+  DcsBios::IntegerBuffer *hdgDegBuffer;
+  DcsBios::IntegerBuffer *altMslFtBuffer;
+  DcsBios::IntegerBuffer *slipballBuffer;
+  DcsBios::IntegerBuffer *turnIndicatorBuffer;
+
+
+void setup()
+{
+  resetParser();
+/*
+    cli(); // stop interrupts
+
+  // set timer0 interrupt at 2kHz
+  TCCR0A = 0; // set entire TCCR0A register to 0
+  TCCR0B = 0; // same for TCCR0B
+  TCNT0 = 0;  // initialize counter value to 0
+
+  // set compare match register for 2khz increments
+  OCR0A = 124; // = (16*10^6) / (2000*64) - 1 (must be <256)
+  // turn on CTC mode
+  TCCR0A |= (1 << WGM01);
+
+  // Set CS01 and CS00 bits for 64 prescaler
+  TCCR0B |= (1 << CS01) | (1 << CS00);
+  // enable timer compare interrupt
+  TIMSK0 |= (1 << OCIE0A);
+
+  sei();*/
+
+  pinMode(TEST_MODE_PIN, INPUT_PULLUP);
+
+
+ // altitudeStepper.setSpeed(5);
+
+//Serial.begin(250000);
+
+  if(isInTestMode() || true){
+    Serial.begin(115200);
+    Serial.println("Software Logistics - Aeronatics Division");
+    Serial.println("> Test Mode");
+  }
+  else{
+    Serial2.begin(115200);
+    Serial2.println("Software Logistics - Aeronatics Division");
+    Serial2.println("> Run Mode");   
+  }
+
+  hdgDegBuffer = new DcsBios::IntegerBuffer(0x0436, 0x01ff, 0, onHdgDegChange);
+  altMslFtBuffer  = new DcsBios::IntegerBuffer(0x0434, 0xffff, 0, onAltMslFtChange); 
+  slipballBuffer = new DcsBios::IntegerBuffer(0x508e, 0xffff, 0, onSlipballChange);
+  turnIndicatorBuffer = new DcsBios::IntegerBuffer(0x504e, 0xffff, 0, onTurnIndicatorChange);
+
+   if (!isInTestMode())
+   {
+    //DcsBios::setup();
+   }
+
+  //turn.writeMicroseconds(1460);
+  //turn.attach(3);
+  //slip.writeMicroseconds(1115);
+  //slip.attach(4);
+
+ // DcsBios::RegisterCommandCallback(cmdHandler);
+}
+
+
+
 int counter = 0;
 bool forward = true;
 
-void loop()
-{
-  int available = Serial.available();
+int countDown = 5000;
 
-  if (available > 0)
+void loop(){
+  return;
+
+  //checkRotary();
+  if (!isInTestMode())
   {
-    Serial.readBytes(buffer, available);
-    for (int idx = 0; idx < available; ++idx)
+    //DcsBios::loop();
+  }
+  counter++;
+  if(countDown-- == 0)
+  {
+    Serial.println("hello world 45 " + String(counter++));
+    countDown = 5000;
+  }
+
+  return;
+  if(isInTestMode())
+  {
+    int available = Serial.available();
+  
+    if (available > 0)
     {
-      byte ch = buffer[idx];
-      Serial.print(char(ch));
-      if (ch == ' ')
+      Serial.readBytes(buffer, available);
+      for (int idx = 0; idx < available; ++idx)
       {
-        readingIndex = false;
-      }
-      else if (ch == '\n')
-      {
-        int sensorIndex = atoi(indexBuffer);
-        int sensorValue = atoi(valueBuffer);
-        Serial.println();
-        setSensor(sensorIndex, sensorValue);
-        resetParser();
-      }
-      else
-      {
-        if (readingIndex)
+        byte ch = buffer[idx];
+        Serial.println(String(ch));
+        if (ch == ' ')
         {
-          indexBuffer[indexBufferIndex++] = ch;
+          readingIndex = false;
+        }
+        else if (ch == '\n')
+        {
+          int sensorIndex = atoi(indexBuffer);
+          int sensorValue = atoi(valueBuffer);
+          Serial.println();
+          setSensor(sensorIndex, sensorValue);
+          resetParser();
         }
         else
         {
-          valueBuffer[valueBufferIndex++] = ch;
+          if (readingIndex)
+          {
+            indexBuffer[indexBufferIndex++] = ch;
+          }
+          else
+          {
+            valueBuffer[valueBufferIndex++] = ch;
+          }
         }
       }
     }
   }
-
-  // put your main code here, to run repeatedly:
-  //DcsBios::loop();
-
-#ifdef STEPPER_TEST
-  char ch = Serial.read();
-  if (ch == 'z')
-  {
-    //counter++;
-    forward = true;
-  }
-  else if (ch == 'x')
-  {
-    //ounter--;
-    forward = false;
-  }
-
-  //stepper.step(1);
-  if (forward)
-  {
-    counter++;
-  }
-  else
-  {
-    counter--;
-  }
-
-  int step = counter % 4;
-  if (step < 0)
-  {
-    step = step + 4;
-  }
-  altitudeStepper.stepMotor(step);
-  headingStepper.stepMotor(step);
-  Serial.println("Steps: " + String(counter) + "  step: " + String(step));
-#endif
 }

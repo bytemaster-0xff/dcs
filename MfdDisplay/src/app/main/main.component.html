@@ -1,38 +1,16 @@
 <app-RadialGauge [start]="0" [degrees]="280" [units]="' mph'" [segment-count]="7" [minor-segment-count]="35" label="M.P.H." 
-   [currentValue]="airspeed" [max]="700" [radius]="200"
-   [red-start]="510" [red-end]="700" style="position: absolute;"></app-RadialGauge>
+   [currentValue]="airspeed" [max]="700" [radius]="215"
+   [red-start]="510" [red-end]="700" style="position: absolute;left:160px"></app-RadialGauge>
       
 
-<app-aoa-gauge style="position:absolute; left:460px " [pitch]="pitch" [bank]="bank" ></app-aoa-gauge>
-<app-Altimeter style="left:960px;position: absolute;" [radius]="200" [minor-segment-count]="50" [units]="' ft'" label="ALTITUDE" [currentValue]="altitude"></app-Altimeter>
+<app-aoa-gauge style="position:absolute; left:712px;top:10px " [caged]="caged" [pitch]="pitch" [bank]="bank" ></app-aoa-gauge>
+<button style="position:absolute; left:960px;top:400px;height:40px " (click)="toggleCaged()">CAGE</button>
 
-<app-turn-slip [radius]="200" [turn]="turn" [slip]="slip" style="position: absolute;left: 0px; top:440px"></app-turn-slip>  
+<app-Altimeter style="left:1270px;position: absolute;top:5px" [radius]="215" [minor-segment-count]="50" [units]="' ft'"  label="ALTITUDE" [currentValue]="altitude"></app-Altimeter>
 
-<app-RadialGauge [start]="0" [degrees]="360" [radius]="200" [units]="' deg'" label="HDG" [currentValue]="heading" [max]="360" 
-      style="left:480px;position: absolute;top:440px"></app-RadialGauge>
+<app-turn-slip [radius]="215" [turn]="turn" [slip]="slip" style="position: absolute;left: 170px; top:560px"></app-turn-slip>  
 
-<app-variometer [radius]="200" [currentValue]="climbRate" style="position: absolute;left: 960px; top:440px"></app-variometer>
+<app-RadialGauge [start]="0" [degrees]="360" [radius]="215" [units]="' deg'" label="HDG" [currentValue]="heading" [max]="360" 
+      style="left:720px;position: absolute;top:560px"></app-RadialGauge>
 
-<app-RadialGauge [radius]="120" [start]="210" [degrees]="320" [max]="45" [segment-count]="9" [green-start]="16" [green-end]="24" [minor-segment-count]="45" 
-  [currentValue]="rpmValue" label="RPM x100" [units]="' x100'"
-  style="position: absolute;left:1400px;top:20px;"></app-RadialGauge>
-
-<app-RadialGauge [radius]="120" [start]="260" [degrees]="300" [minor-segment-count]="50" [segment-count]="10" [units]="' in Hg'" [min]="0" [max]="70" [radius]="100" 
-  [green-start]="26" [green-end]="36" label="MANIFOLD" [currentValue]="manifoldPressure" 
-  style="position: absolute;left: 1400px; top:330px"></app-RadialGauge>
-
-
-<app-RadialGauge [segment-count]="4" [start]="245" [degrees]="230" [max]="92" [units]="' gal'" [minor-segment-count]="12"
-  [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Left" [currentValue]="fuelLeft" 
-  style="position: absolute;left: 1420px; top:620px"></app-RadialGauge>
-
-<app-RadialGauge [segment-count]="4" [start]="245" [degrees]="230" [max]="92" [units]="' gal'" [minor-segment-count]="12"
-  [red-start]="0" [red-end]="5" [marker-font-size]="12" [radius]="60" label="Right" [currentValue]="fuelRight" 
-  style="position: absolute;left: 1600px; top:620px"></app-RadialGauge>
-
-
-
-<app-temperature [radius]="80" [red-start]="40" [red-end]="50" [green-start]="10" [green-end]="40" [radius]="60" [currentValue]="carbTemperature" label="CARB. TEMP" style="position: absolute;left: 10px; top:890px"></app-temperature>
-<app-temperature [radius]="80" [currentValue]="coolantTemperature" label="COOLANT" style="position: absolute;left: 240px; top:890px"></app-temperature>
-
-<app-oil-fuel-gauge [oil-pressure]="oilPressure" [fuel-pressure]="fuelPressure" [oil-temperature]="oilTemperature" [radius]="100" style="position: absolute; top: 890px; left:740px" ></app-oil-fuel-gauge>
+<app-variometer [radius]="215" [currentValue]="climbRate" style="position: absolute;left: 1275px; top:560px"></app-variometer>

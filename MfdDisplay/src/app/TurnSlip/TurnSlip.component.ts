@@ -8,8 +8,21 @@ import { RadialGaugeComponent } from '../RadialGauge/RadialGauge.component';
   styleUrls: ['./TurnSlip.component.css']
 })
 export class TurnSlipComponent extends RadialGaugeComponent implements OnInit {
-  @Input() turn = 0;
-  @Input() slip = 0;
+  private _turn: number = 0;
+  
+  @Input()  
+  set turn(value: number) {
+    this.setTurnPath(value);
+  };
+  get turn() {return this._turn;}
+
+  private _slip: number = 0;
+
+  @Input() 
+  set slip(value: number) {
+    this.setSlip(value);
+  };
+  get slip():number {return this._slip;}
 
   ballX = 180;
   ballY = 180;
@@ -36,13 +49,15 @@ export class TurnSlipComponent extends RadialGaugeComponent implements OnInit {
   }
 
   setSlip(slip: number) {
+    this._slip = slip;
     this.ballX = (slip * 1.3) + this.centerX;
      this.ballY = 13 * Math.cos((Math.PI / 180.0) * slip) + (this.fullHeight * 0.705);
 
   }
 
-  setTurnPath(turn) {
+  setTurnPath(turn: number) {
     this.turnValue = turn;
+    this._turn = turn;
     const workingValue = (((turn - this.min) / this.max) * this.degrees);
     const corrected = (workingValue + this.start) - 90;
 
@@ -78,7 +93,7 @@ export class TurnSlipComponent extends RadialGaugeComponent implements OnInit {
     this.centerY = this.radius + this.bezel;
     this.fullWidth = this.centerX * 2;
     this.fullHeight = this.centerY * 2;
-
+/*
     window.setInterval(() => {
       if(this.dir == 0) {
         if(this.slip > 90) {
@@ -97,14 +112,12 @@ export class TurnSlipComponent extends RadialGaugeComponent implements OnInit {
       }
       this.setSlip(this.slip);
     }, 50)
-
+*/
 
     this.renderBezel();
 
-    this.setTurnPath(5);
-
-//M 0 0 L 0 0 A 30 10, 0, 0 0, 300 50 L 300 0 L 0 0 Z
-//M 0 0 L 50 0 A 30 10, 0, 0 0, 300 50 L 300 0 L 0 0 Z
+    this.setTurnPath(0);
+    this.setSlip(0);
     let rx = 60;
     let ry = 10;
     let rotate = 0;
@@ -114,10 +127,5 @@ export class TurnSlipComponent extends RadialGaugeComponent implements OnInit {
     let y = 34;
 
     this.slipPath = ` M 0 0 L 0 ${y} A ${rx} ${ry}, ${rotate}, ${largeArgFlag} ${sweepFlag}, ${x} ${y} L ${x} 0 L 0 0 Z`;
-    console.log(this.slipPath)
-
-    this.ballX = this.centerX;
-    this.ballY = this.fullHeight * 0.73
-
   }
 }
