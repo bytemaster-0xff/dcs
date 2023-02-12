@@ -15,39 +15,48 @@
   <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.1" fill="#444" />
   <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.04" fill="black" />
 
-  <circle [attr.cx]="centerY" fill="#0" [attr.cy]="centerX" [attr.r]="radius + 6" fill="silver"  filter="url(#shadow)"/> 
+  <circle [attr.cx]="centerY" fill="#0" [attr.cy]="centerX" [attr.r]="radius + 6" fill="silver"  filter="url(#shadow)"/>
   <circle [attr.cx]="radius + bezel" fill="black" [attr.cy]="radius + bezel" [attr.r]="radius" stroke="white" stroke-width="2" />
-    <g transform="translate(170,300)">
-      <path d="M 0 0
-      L 0 30 
-      A 4 0.5, 180, 0 0, 100 30 
-      L 100 0
-      A 4 0.5, -180, 0 1, 0 0"
-      style="fill:silver" />
-    <path d="M 0 5 
-      L 0 25
-      A 4 0.5, 180, 0 0, 100 25 
-      L 100 5
-      A 4 0.5, -180, 0 1, 0 5"
-      style="stroke:gray; fill:white" />
 
-      <text x="50" y="55" font-size="14" fill="white" text-anchor="middle">2 MIN TURN</text>
+    <g [attr.transform]="translateIt(0.20, 0.65)">
+      <path [attr.d]="slipPath" style=" fill:white" />
     </g>
 
-    <g transform="translate(140,100)">
-      <path d="M0 -7.5 L5 -2.5 L5 7.5 L-5 7.5 L-5 -2.5 Z" fill="white" transform="rotate(-15)" />  
-    </g>
-    <g transform="translate(240,100)">
-      <path d="M0 -7.5 L5 -2.5 L5 7.5 L-5 7.5 L-5 -2.5 Z" fill="white" transform="rotate(15)" />  
+
+    <g [attr.transform]="translateIt(0.20, 0.56)">
+      <path [attr.d]="slipPath" style=" fill:black" />
     </g>
 
-    <path d="M-6 -6 L6 -6 L6 2 L0 8 L-6 2 Z" fill="white" transform="translate(100,100)" />  
+    <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.04" fill="black" />
 
-    <text [attr.x]="centerY - 34" font-family="arial" y="58" font-size="14" fill="white" text-anchor="middle">L</text>
-    <text [attr.x]="centerY + 34" font-family="arial" y="58" font-size="14" fill="white" text-anchor="middle">R</text>
+    <g [attr.transform]="translateIt(0.35, 0.2)">
+      <path [attr.d]="markerPath" fill="white" transform="rotate(-15)" />
+    </g>
+
+    <g [attr.transform]="translateIt(0.65, 0.2)">
+      <path [attr.d]="markerPath" fill="white" transform="rotate(15)" />
+    </g>
+
+    <g [attr.transform]="translateIt(0.34, 0.15)">
+      <text font-family="arial" font-size="16" fill="white" transform="rotate(-15)" text-anchor="middle">L</text>
+    </g>
+
+    <g [attr.transform]="translateIt(0.66, 0.15)">
+      <text  font-family="arial" font-size="16" fill="white" transform="rotate(15)" text-anchor="middle">R</text>
+    </g>
 
     <path [attr.d]="turnPath" fill="white" />
 
     <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.1" fill="#444" />
     <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.04" fill="black" />
+
+    <text [attr.y]="centerY + 60" [attr.x]="centerX" font-size="14" fill="white" text-anchor="middle">2 MIN TURN</text>
+
+
+    <text [attr.y]="centerY + 160" [attr.x]="centerX" font-size="14" fill="white" 
+    text-anchor="middle">{{turn}} {{slip}}</text>
+
+
+    <circle [attr.cx]="ballX" fill="#333" [attr.cy]="ballY" [attr.r]="radius * 0.115" />
+
   </svg>

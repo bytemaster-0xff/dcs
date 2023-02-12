@@ -25,12 +25,12 @@
     [attr.y2]="segment.y2" stroke="white" stroke-width="2" />
 
   <text *ngFor="let segment of segments" [attr.x]="segment.labelX" [attr.y]="segment.labelY" dominant-baseline="middle"
-    [attr.font-size]="markerFontSize" font-weight="bold" text-anchor="middle" fill="white">{{segment.label}}</text>
-  <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius + bezel"
-    [attr.y]="radius / 1.5 + bezel">{{label}}</text>
+    font-size="1.5em" font-weight="bold" text-anchor="middle" fill="white">{{segment.label}}</text>
+  <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius + bezel" font-size="2em" 
+    [attr.y]="radius / 1.5 + bezel" font-size:="24pt">{{label}}</text>
 
   <text fill="white" dominant-baseline="middle" text-anchor="middle" [attr.x]="radius + bezel"
-    [attr.y]="radius * 1.5 + bezel">{{valueLabel}}</text>
+    [attr.y]="radius * 1.5 + bezel" font-size="2em">{{valueLabel}}</text>
   <path [attr.d]="pointer" fill="white" />
   <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.1" fill="#444" />
   <circle [attr.cx]="centerX" fill="#333" [attr.cy]="centerY" [attr.r]="radius * 0.04" fill="black" />

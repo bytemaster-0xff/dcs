@@ -134,6 +134,13 @@ void WriteDouble(double value)
 
 void onStepperValueChanged(double newValue, bool raw)
 {
+  if(newValue < stepperMinValue || newValue > stepperMaxValue){
+    Serial.print("Stepper Out Of Range ");
+    Serial.println(newValue);
+    Serial.println();
+    return;
+  }
+
   double steps = 0;
 
   if (!raw)
@@ -209,9 +216,8 @@ void onStepperValueChanged(double newValue, bool raw)
   }
 
   int delta = ((int)steps - oldStepperValue);
-  mainStepper->step(delta);
-
-  if (isInTestMode())
+  
+  if (isInTestMode() || true)
   {
     Serial.print(F("Value="));
     Serial.print(newValue);
@@ -224,6 +230,8 @@ void onStepperValueChanged(double newValue, bool raw)
     Serial.println(F(";"));
   }
 
+  mainStepper->step(delta);
+
   oldStepperValue = steps;
 }
 
@@ -234,10 +242,18 @@ void onStepperValueChanged(unsigned int newValue)
 
 void leftServoChanged(unsigned int newValue)
 {
-  if (isInTestMode())
+if(newValue < servoLeftMinValue || newValue > servoLeftMaxValue){
+    Serial.print("Left Servo Out Of Range ");
+    Serial.println(newValue);
+    Serial.println();
+    return;
+  }
+
+  if (isInTestMode()|| true)
   {
     Serial.print(F("Setting left servo="));
     Serial.println(newValue);
+   // 	DcsBios::PollingInput::setMessageSentOrQueued();
   }
 
   int microSecondRange = servoLeftMax - servoLeftMin;
@@ -252,19 +268,30 @@ void leftServoChanged(unsigned int newValue)
 
 void rightServoChanged(unsigned int newValue)
 {
+if(newValue < servoRightMinValue || newValue > servoRightMaxValue){
+    Serial.print("Right Servo Out Of Range ");
+    Serial.println(newValue);
+    Serial.println();
+    return;
+  }
+
+
   if (isInTestMode())
   {
     Serial.print(F("Setting right servo="));
     Serial.println(newValue);
+//    	DcsBios::PollingInput::setMessageSentOrQueued();
   }
 
   int microSecondRange = servoRightMax - servoRightMin;
-  int range = servoRightMaxValue - servoRightMinValue;
+  unsigned int range = servoRightMaxValue - servoRightMinValue;
   if (range > 0)
   {
     float ratio = (float)newValue / (float)range;
     int newMS = microSecondRange * ratio;
-    Serial.println(String(microSecondRange) + "," + String(range) + "," + String(ratio) + "," + String(newMS));
+    if(isInTestMode())
+      Serial.println(String(microSecondRange) + "," + String(range) + "," + String(ratio) + "," + String(newMS));
+    
     rightGauge.writeMicroseconds(SERVO_MAX - (servoRightMin + newMS));
   }
 }
@@ -502,7 +529,7 @@ void loadSettings()
 
   if (stepperExists)
   {
-    mainStepper = new DcsBios::Stepper(0x509A, STEPS, 6, 2, 4, 3, 5);
+    mainStepper = new DcsBios::Stepper(stepperAddress, STEPS, 6, 2, 4, 3, 5);
     stepperValueBuffer = new DcsBios::IntegerBuffer(stepperAddress, 0xffff, 0, onStepperValueChanged);
     mainStepper->setZeroOffset(stepperOffset);
     mainStepper->setSpeed(stepperSpeed);
@@ -527,13 +554,14 @@ void setup()
 {
   pinMode(TEST_MODE_PIN, INPUT_PULLUP);
 
-  DcsBios::RegisterCommandCallback(cmdHandler);
+  DcsBios::RegisterCommandCallback(cmdHandler); 
 
   if (isInTestMode())
   {
     Serial.begin(115200);
     Serial.println();
     Serial.println(F("Welcome - Test Mode"));
+    Serial.println(F("VERSION 0.8"));
     Serial.println(F("============================================"));
     Serial.println(digitalRead(TEST_MODE_PIN) == HIGH ? "HIGH " : "LOW");
   }
@@ -546,6 +574,8 @@ void setup()
   }
 
   mainStepper->home();
+  Serial.print("startup complete");
+  DcsBios::PollingInput::setMessageSentOrQueued();
 }
 
 
