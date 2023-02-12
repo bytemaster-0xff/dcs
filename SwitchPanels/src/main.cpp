@@ -32,26 +32,26 @@ DcsBios::LED landingGearRed(0x500e, 0x4000, 7);
 void initialize() {}
 #endif
 
-//#define TRIM_PANEL
+#define TRIM_PANEL
 #ifdef TRIM_PANEL
 DcsBios::SwitchMixture mixtureControl("MIXTURE_CONTROL", 2, 3);
 
-DcsBios::RotaryEncoder rudderTrim("RUDDER_TRIM", "-800", "+800", 4, 5);
-DcsBios::RotaryEncoder aileronTrim("AILERON_TRIM", "-800", "+800", 6, 7);
-DcsBios::RotaryEncoder elevatorTrime("ELEVATOR_TRIM", "-800", "+800", 8, 9);
+//DcsBios::RotaryEncoder rudderTrim("RUDDER_TRIM", "-800", "+800", 4, 5);
+//DcsBios::RotaryEncoder aileronTrim("AILERON_TRIM", "-800", "+800", 6, 7);
+//DcsBios::RotaryEncoder elevatorTrime("ELEVATOR_TRIM", "-800", "+800", 8, 9);
 
-DcsBios::ServoOutput flapsControlHandleOutput(0x502a, 11, 544, 2400);
+//DcsBios::ServoOutput flapsControlHandleOutput(0x502a, 11, 544, 2400);
 
-DcsBios::PotentiometerEWMA<5, 128, 5> propellerRpm("PROPELLER_RPM", A0);
-DcsBios::PotentiometerEWMA<5, 128, 5> carbColdAir("CARB_COLD_AIR", A1);
-DcsBios::PotentiometerEWMA<5, 128, 5> carbCoWarmAir("CARB_WARM_AIR", A2);
+//DcsBios::PotentiometerEWMA<5, 128, 5> propellerRpm("PROPELLER_RPM", A0);
+//DcsBios::PotentiometerEWMA<5, 128, 5> carbColdAir("CARB_COLD_AIR", A1);
+//DcsBios::PotentiometerEWMA<5, 128, 5> carbCoWarmAir("CARB_WARM_AIR", A2);
 DcsBios::PotentiometerEWMA<5, 128, 5> flapsControlHandle("FLAPS_CONTROL_HANDLE", A3);
 String VERISON = "TRIM_PANEL";
 
 void initialize() {}
 #endif
 
-#define AUX_PANEL
+//#define AUX_PANEL
 #ifdef AUX_PANEL
 //DcsBios::Switch2Pos tailLts("AUX5_SW1", 5);
 //DcsBios::Switch2Pos wingLts("AUX5_SW2", 6);
@@ -142,13 +142,15 @@ void cmdHandler(unsigned char cmd, unsigned int address, int value)
 
 void setup()
 {
+  Serial.println("Welcome - Calibration Mode");
+
 #ifndef TESTMODE  
   DcsBios::setup();  
   DcsBios::RegisterCommandCallback(cmdHandler);  
 #else
-  _servo.attach(11);  
+  //_servo.attach(11);  
   Serial.begin(115200);
-  Serial.println("Welcome - Calibration Mode");
+  
 #endif  
 }
 
@@ -176,7 +178,7 @@ void loop()
       }
       else if (cmd == "servo")
       {
-        _servo.write(paramValue);
+   //     _servo.write(paramValue);
       }
     }
   }

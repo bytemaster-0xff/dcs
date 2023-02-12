@@ -50,6 +50,7 @@ export default class ExportDataParser {
     }
 
     private notifyData(address: number, data: ArrayBuffer) {
+      //console.log(address, data);
         this.dcsUpdate$.next({ address, data });
     }
 

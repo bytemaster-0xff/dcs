@@ -22,7 +22,7 @@ export class DcsClientService {
 
     public init() {
         console.log("Init service.");
-        this.webSocket = new WebSocket('ws://10.1.1.38:5010/api/websocket');
+        this.webSocket = new WebSocket('ws://10.1.1.115:5010/api/websocket');
         this.webSocket.onopen = (evt) => {
             console.log('opn');
             console.log(evt);
@@ -32,6 +32,7 @@ export class DcsClientService {
                 datatype: 'live_data',
                 data: {}
             });
+            console.log(requestLiveData);
             this.webSocket.send(requestLiveData);
         };
 
@@ -54,6 +55,7 @@ export class DcsClientService {
             }
         );
         this.webSocket.onmessage = (msg => {
+          //console.log(msg.data);
             msg.data.arrayBuffer()
                 .then(res => {
                     const byteBuffer = new Uint8Array(res);
