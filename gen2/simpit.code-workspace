@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "left-mid-pnl"
+		},
+		{
+			"path": "elec-pnl"
+		},
+		{
+			"path": "fire-test-pnl"
+		},
+		{
+			"path": "aux-pnl"
+		},
+		{
+			"path": "view-controller"
+		},
+		{
+			"path": "common"
+		}
+	],
+	"settings": {}
+}
