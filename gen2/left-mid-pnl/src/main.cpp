@@ -23,7 +23,7 @@ void setup()
 	configureConsole();
 
 	strip1.Begin();
-	setAllLeds(&strip1, 0x1f, 0x1f, 0x1f);
+	setAllLeds(&strip1, 0x1f,0,0);
 
 	pins[0] = 34;
 	pins[1] = (35 << 8) | 34;

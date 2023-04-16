@@ -23,12 +23,12 @@ void simPitLoop(NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> *strip) 
 	{
 		if (wifiMQTT.isConnected())
 		{
-			setAllLeds(strip, 0x00, 0xFF, 0x00);
+			setAllLeds(strip, 0x00, 0x7F, 0x00);
 		}
 		else
 		{
 			if (flashState)
-				setAllLeds(strip, 0x00, 0x00, 0xFF);
+				setAllLeds(strip, 0x00, 0x00, 0x7F);
 			else
 				setAllLeds(strip, 0x00, 0x00, 0x00);
 		}
@@ -36,7 +36,7 @@ void simPitLoop(NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> *strip) 
 	else
 	{
 		if (flashState)
-			setAllLeds(strip, 0xFF, 0x00, 0x00);
+			setAllLeds(strip, 0x7F, 0x00, 0x00);
 		else
 			setAllLeds(strip, 0x00, 0x00, 0x00);
 	}
