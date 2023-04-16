@@ -20,7 +20,14 @@
 		},
 		{
 			"path": "arm-panel"
+		},
+		{
+			"path": "mfd-ctrls"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"*.tcc": "cpp"
+		}
+	}
 }

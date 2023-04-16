@@ -104,5 +104,4 @@ void setup()
 void loop()
 {
 	simPitLoop(&strip1);
-
 }
