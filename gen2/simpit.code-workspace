@@ -23,6 +23,19 @@
 		},
 		{
 			"path": "mfd-ctrls"
+		},
+		{
+			"path": "sensor-pnl"
+		},
+		{
+			"path": "fcs-pnl"
+		},
+		{
+			"name": "aces-hw",
+			"path": "aces-hw"
+		},
+		{
+			"path": "aces-mqtt"
 		}
 	],
 	"settings": {
