@@ -10,6 +10,9 @@
 #endif    
 
 void setAllLeds(NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> *strip, uint8_t red, uint8_t green, uint8_t blue){
+    if(strip == NULL)
+		return;
+	
     for (int idx = 0; idx < NUMBER_LEDS; ++idx)
 	{
 		strip->SetPixelColor(idx - 1, RgbColor(red, green, blue)); // red
@@ -18,7 +21,10 @@ void setAllLeds(NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> *strip, 
 }
 
 void testPattern(NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> *strip, uint8_t red, uint8_t green, uint8_t blue) {
-   	for (int idx = 0; idx < NUMBER_LEDS; ++idx)
+   	if(strip == NULL)
+		return;
+
+	for (int idx = 0; idx < NUMBER_LEDS; ++idx)
 	{
 		if (idx > 0)
 			strip->SetPixelColor(idx - 1, RgbColor(0, 0, 0)); // red

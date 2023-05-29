@@ -15,8 +15,6 @@
 #define AUX_PANEL_SKU "ARM Panel"
 #define FIRMWARE_VERSION "1.0.0"
 
-NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> strip1(NUMBER_LEDS, 23); // note: modern WS2812 with letter like WS2812b
-
 void mqttReceived(String topic, byte *buffer, size_t len)
 {
 	if(topic == "weapons/mode/aa") {
@@ -45,9 +43,6 @@ void mqttReceived(String topic, byte *buffer, size_t len)
 void setup()
 {
 	configureConsole();
-
-	strip1.Begin();
-	setAllLeds(&strip1, 0xFF, 0xFF, 0xFF);
 
 	pins[0] = 16;
 	pins[1] = 17;
@@ -79,10 +74,6 @@ void setup()
 	pinMode(33, OUTPUT);
 	pinMode(25, OUTPUT);
 
-	digitalWrite(32, LOW);
-	digitalWrite(33, LOW);
-	digitalWrite(25, LOW);
-
 	wifiMQTT.addSubscriptions("#");
 	wifiMQTT.setMessageReceivedCallback(mqttReceived);
 
@@ -91,10 +82,5 @@ void setup()
 
 void loop()
 {
-	simPitLoop(&strip1);
-
-	uint16_t adc1 = analogRead(35);
-	uint16_t adc2 = analogRead(34);	
-
-	Serial.println("ADC: " + String(map(adc1, 0, 4095, 32737, 0)) + "," + String(map(adc2, 0, 4095, 32737, 0)));
+	simPitLoop(NULL);
 }
