@@ -4,7 +4,7 @@
 void initCommonSettings() {
 	sysConfig.Commissioned = true;
 	sysConfig.WiFiEnabled = true;
-	sysConfig.WiFiSSID = "NuvIoT";
+	sysConfig.WiFiSSID = "SimPit";
 	sysConfig.WiFiPWD = "TheWolfBytes";
 	sysConfig.SrvrType = "mqtt";
 	sysConfig.SrvrHostName = "10.1.1.116";

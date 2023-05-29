@@ -22,7 +22,7 @@ NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> strip1(NUMBER_LEDS, 23);
 RotaryEncoder encoder(35, 34, RotaryEncoder::LatchMode::TWO03);
 
 #define ELEC_PANEL_SKU "F18 FCS APU OXY ENG Panel"
-#define FIRMWARE_VERSION "1.0.0"
+#define FIRMWARE_VERSION "1.0.2"
 
 static int pos = 0;
 
