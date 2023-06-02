@@ -9,7 +9,7 @@
     #define NUMBER_PINS 0
 #endif
 
-#define PIN_DETAIL
+//#define PIN_DETAIL
 
 uint16_t pins[32];
 uint8_t lastStates[32];
@@ -22,8 +22,8 @@ void sendPress(uint8_t button)
 {
 	if (pressTopics[button] != NULL && pressTopics[button].length() > 0)
 	{
-		console.println(pressTopics[button]);
-		mqttPublish(pressTopics[button]);
+		console.println("ACTION=" + pressTopics[button]);
+		//mqttPublish(pressTopics[button]);
 	}
 }
 
@@ -31,8 +31,8 @@ void sendRelease(uint8_t button)
 {
 	if (releaseTopics[button] != NULL && releaseTopics[button].length() > 0)
 	{
-		console.println(releaseTopics[button]);
-		mqttPublish(releaseTopics[button]);
+		console.println("ACTION=" + releaseTopics[button]);
+		//mqttPublish(releaseTopics[button]);
 	}
 }
 

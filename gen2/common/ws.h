@@ -3,11 +3,11 @@
 
 void initCommonSettings() {
 	sysConfig.Commissioned = true;
-	sysConfig.WiFiEnabled = true;
-	sysConfig.WiFiSSID = "SimPit";
-	sysConfig.WiFiPWD = "TheWolfBytes";
-	sysConfig.SrvrType = "mqtt";
-	sysConfig.SrvrHostName = "10.1.1.116";
+	sysConfig.WiFiEnabled = false;
+	sysConfig.WiFiSSID = "";
+	sysConfig.WiFiPWD = "";
+	sysConfig.SrvrType = "";
+	sysConfig.SrvrHostName = "";
 	sysConfig.Port = 1883;
 	sysConfig.SrvrUID = "";
 	sysConfig.SrvrPWD = "";

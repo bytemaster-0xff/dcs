@@ -12,7 +12,8 @@ uint32_t nextFlash;
 void simPitLoop(NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> *strip)
 {
 	commonLoop();
-
+	setAllLeds(strip, 0x00, 0x7F, 0x00);
+	/*
 	if (strip != NULL)
 	{
 		nextFlash = millis() + 500;
@@ -44,6 +45,7 @@ void simPitLoop(NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> *strip)
 				setAllLeds(strip, 0x00, 0x00, 0x00);
 		}
 	}
+	*/
 
 	for (int idx = 0; idx < NUMBER_PINS; ++idx)
 	{
