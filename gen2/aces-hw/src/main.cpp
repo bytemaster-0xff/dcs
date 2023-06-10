@@ -94,7 +94,6 @@ void setup()
   releaseTopics[11] = "aces2/arm";
 
   for(int idx = 0; idx < 8; ++idx){
-    Serial.println( "INIT ->" + String(outputs[idx]));
     pinMode(outputs[idx], OUTPUT);
   }
 
@@ -108,6 +107,7 @@ void setup()
 String content = "";
 
 void mqttHandle(String msg){
+  msg.trim();
   if(msg == "aces2/seat/tilt/forward"){
     digitalWrite(outputs[0], HIGH);
     delay(1000);
@@ -130,7 +130,6 @@ void mqttHandle(String msg){
     delay(1000);
     digitalWrite(outputs[3], LOW);    
   }
-
   else if(msg == "aces2/seat/back/raise"){
     digitalWrite(outputs[4], HIGH);
     delay(1000);
@@ -151,6 +150,10 @@ void mqttHandle(String msg){
     delay(1000);
     digitalWrite(outputs[7], LOW);    
   }  
+  else if(msg == "SENDALL") {
+    sendCurrentPinState();
+  }
+
 
   Serial.println(msg);
 }

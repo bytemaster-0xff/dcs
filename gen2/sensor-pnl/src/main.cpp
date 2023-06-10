@@ -4,7 +4,7 @@
 #include <ESP32Servo.h>
 #include <NuvIoT.h>
 
-#define NUMBER_PINS 18
+#define NUMBER_PINS 19
 #define NUMBER_LEDS 48
 
 #define FULL_GREEN
@@ -21,22 +21,9 @@ NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> strip1(NUMBER_LEDS, 23);
 #define ELEC_PANEL_SKU "F18 Sensor Panel"
 #define FIRMWARE_VERSION "1.0.0"
 
-void cmdCallback(String cmd)
-{
-	console.println("ECHO => " + cmd);
-
-	if(cmd == "PING")	
-		console.println("PONG");
-	else if(cmd == "WHOIS")		
-		console.println("IAM=" + sysConfig.DeviceId);
-	else if(cmd == "SENDALL")		
-		sendCurrentPinState();
-}
-
 void setup()
 {
 	configureConsole();
-	console.registerCallback(cmdCallback);
 
 	strip1.Begin();
 	setAllLeds(&strip1, 0x1f, 0x9, 0x0u);

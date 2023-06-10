@@ -9,7 +9,7 @@
     #define NUMBER_PINS 0
 #endif
 
-//#define PIN_DETAIL
+#define PIN_DETAIL
 
 uint16_t pins[32];
 uint8_t lastStates[32];

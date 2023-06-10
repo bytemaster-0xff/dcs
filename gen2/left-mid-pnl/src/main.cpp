@@ -16,11 +16,11 @@
 NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1X8Ws2812xMethod> strip1(NUMBER_LEDS, 23); // note: modern WS2812 with letter like WS2812b
 
 #define LEFT_MID_PANEL_SKU "Left Mid Panel"
-#define FIRMWARE_VERSION "1.0.0"
+#define FIRMWARE_VERSION "1.2.0"
 
 void setup()
 {
-	configureConsole();
+	configureConsole();	
 
 	strip1.Begin();
 	setAllLeds(&strip1, 0x1f,0,0);
