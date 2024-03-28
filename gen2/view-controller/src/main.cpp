@@ -183,7 +183,7 @@ void loop()
 			strip1.SetPixelColor(idx - 1, RgbColor(0, 0, 0)); // red
 
 		strip1.SetPixelColor(idx, RgbColor(0, 0, 255)); // red
-		strip1.Show();
+		7.Show();
 		delay(25);
 	}
 

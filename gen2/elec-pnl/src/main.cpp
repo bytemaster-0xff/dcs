@@ -56,13 +56,14 @@ void setup()
 	releaseTopics[5] = F("elec/avcool/norm");
 
 	sysConfig.DeviceId = "f18elecpanel";
-	initCommonSettings();
 	initButtons();
 
 	state.init(ELEC_PANEL_SKU, FIRMWARE_VERSION, "f18elecpnl", "f18elecpnl", 010);
 
 	servo1.attach(19);
 	servo2.attach(21);
+
+	initCommonSettings();
 }
 
 int angle = 30;

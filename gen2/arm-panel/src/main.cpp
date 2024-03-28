@@ -15,29 +15,34 @@
 #define AUX_PANEL_SKU "ARM Panel"
 #define FIRMWARE_VERSION "1.0.0"
 
-void mqttReceived(String topic, byte *buffer, size_t len)
+void armPanelCallback(String cmd)
 {
-	if(topic == "weapons/mode/aa") {
+	console.println(cmd);
+	cmd.trim();
+	if (cmd.length() > 0)
+	{
+		if(cmd == "weapons/mode/aa") {
 		digitalWrite(32, LOW);
 		digitalWrite(33, HIGH);
 
 	}
-	else if(topic == "weapons/mode/ag") {
+	else if(cmd == "weapons/mode/ag") {
 		digitalWrite(32, HIGH);
 		digitalWrite(33, LOW);		
 	}
-	else if(topic == "weapons/mode/off") {
+	else if(cmd == "weapons/mode/off") {
 		digitalWrite(32, LOW);
 		digitalWrite(33, LOW);		
 	}
-	else if(topic == "fire/extinguisher/on") {
+	else if(cmd == "fire/extinguisher/on") {
 		digitalWrite(25, HIGH);
 	}
-	else if(topic == "fire/extinguisher/off") {
+	else if(cmd == "fire/extinguisher/off") {
 		digitalWrite(25, LOW);
 	}
-
-	console.println("mqtt=handltopic; // Topic: " + topic);
+		else 
+			cmdCallback(cmd);
+	}
 }
 
 void setup()
@@ -70,13 +75,11 @@ void setup()
 	initCommonSettings();
 	initButtons();
 
+	console.registerCallback(armPanelCallback);
+
 	pinMode(32, OUTPUT);
 	pinMode(33, OUTPUT);
 	pinMode(25, OUTPUT);
-
-	wifiMQTT.addSubscriptions("#");
-	wifiMQTT.setMessageReceivedCallback(mqttReceived);
-
 	state.init(AUX_PANEL_SKU, FIRMWARE_VERSION, "f18armpanel", "f18armpanel", 010);
 }
 

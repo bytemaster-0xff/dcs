@@ -27,8 +27,8 @@ void setup()
 	strip1.Begin();
 	strip2.Begin();
 	strip3.Begin();
-	setAllLeds(&strip1, 0xff, 0x00, 0x00);
-	setAllLeds(&strip2, 0xFF, 0x00, 0x00);
+	setAllLeds(&strip1, 0x00, 0xFF, 0x00);
+	setAllLeds(&strip2, 0x00, 0xFF, 0x00);
 	setAllLeds(&strip3, 0x00, 0xFF, 0x00);
 
 	pins[0] =22;
@@ -65,15 +65,5 @@ void setup()
 
 void loop()
 {
-	simPitLoop(&strip1);
-	if (wifiMQTT.isConnected()){
-		setAllLeds(&strip1, 0x00, 0xFF, 0x00);
-		setAllLeds(&strip2, 0x00, 0xFF, 0x00);
-		setAllLeds(&strip3, 0x00, 0xff, 0x00);
-	}
-	else {
-		setAllLeds(&strip1, 0xff, 0x00, 0x00);
-		setAllLeds(&strip2, 0xFF, 0x00, 0x00);
-		setAllLeds(&strip3, 0xFF, 0x00, 0x00);
-	}	
+	simPitLoop(NULL);
 }
